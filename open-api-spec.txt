@@ -1,0 +1,755 @@
+openapi: 3.0.0
+
+info:
+  description: This is the most complex API
+  version: "1.0.0-oas3"
+  title: Dabs
+  contact:
+    email: camelia.i.milut@info.uaic.ro
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: authentication and authorization
+    description: Security First
+  - name: metrics
+    description: Metrics and statistics about databases
+  - name: newsfeed
+    description: News about databases
+  - name: sparql
+    description: the SPARQL endpoint of Dabs
+  - name: users
+    description: Everything about users
+  - name: databases
+    description: Everything about databases
+  - name: preferences
+    description: Everything about preferences
+paths:
+  /newsfeed:
+    get:
+      description: Data about databases, news, computer science news
+      tags:
+      - newsfeed
+      summary: Retrieves news about databases
+      responses:
+        200:
+          description: News content
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  /authorize:
+    post:
+      tags:
+      - authentication and authorization
+      summary: Verifies the identity of the caller
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request_body:
+                  type: string
+                request_urn:
+                  type: string
+              required:
+                - request_body
+                - request_urn
+      responses:
+        200:
+          description: Returns an user token
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  /login:
+    post:
+      tags:
+      - authentication and authorization
+      summary: Login and retrieve user token
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                auth_type:
+                  type: string
+              required:
+                - email
+                - auth_type
+      responses:
+        200:
+          description: Returns an user token
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  /metrics:
+    get:
+      tags:
+      - metrics
+      summary: Metrics about databases
+      responses:
+        200:
+          description: First Page Metrics
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: |
+                  Posted on 2019-11-14 by PostgreSQL Global Development Group
+                  The PostgreSQL Global Development Group has released an update to all supported versions of our database system, including 12.1, 11.6, 10.11, 9.6.16, 9.5.20, and 9.4.25. This release fixes over 60 bugs reported over the last three months.
+        409:
+          description: bad request
+        401:
+          description: authentication token not provided
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  /sparql:
+    post:
+      tags:
+      - sparql
+      summary: MuSeR SPARQL endpoint
+      operationId: executeSparql
+      description: |
+        Sparql Endpoint to access user RDF Graph.
+      security:
+        - Bearer: []
+      requestBody:
+        description: SPARQL query to execute
+        required: true
+        content:
+          '*/*':
+            schema:
+              type: string
+      responses:
+        200:
+          description: SPARQL query executed successfully
+        409:
+          description: bad request
+        401:
+          description: authentication token not provided
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  /users:
+    get:
+      tags:
+      - users
+      summary: List all users
+      operationId: listUsers
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: users response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    post:
+      tags:
+      - users
+      summary: Create a new user
+      description: Create an user object
+      security:
+        - Bearer: []
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: user created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  '/users/{UserID}':
+    get:
+      tags:
+      - users
+      summary: Get all data of an user
+      description: Returns an user on a single ID
+      operationId: findUserByID
+      security:
+        - Bearer: []
+      parameters:
+        - name: UserID
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: user response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: user not found
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    put:
+      tags:
+      - users
+      summary: Update an user by id
+      description: Update an user object by ID
+      security:
+        - Bearer: []
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      parameters:
+        - name: UserID
+          in: path
+          description: ID of user to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: user response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: user not found
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    delete:
+      tags:
+      - users
+      summary: Delete an user by id
+      description: Delete an user object by id
+      security:
+        - Bearer: []
+      parameters:
+        - name: UserID
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: user deleted
+        '404':
+          description: user not found
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  /preferences:
+    get:
+      tags:
+      - preferences
+      summary: List all Preferences
+      operationId: listPreferences
+      security:
+        - Bearer: []
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Preferences response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Preference'
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    post:
+      tags:
+      - preferences
+      summary: Create a new preference
+      description: Create a Preference object
+      security:
+        - Bearer: []
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Preference'
+      responses:
+        '201':
+          description: Preference created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Preference'
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  '/preferences/{PreferenceID}':
+    get:
+      tags:
+      - preferences
+      description: Returns a Preference on a single ID
+      operationId: findPreferenceByID
+      security:
+        - Bearer: []
+      parameters:
+        - name: PreferenceID
+          in: path
+          description: ID of Preference to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Preference response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preference'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    put:
+      tags:
+      - preferences
+      description: Update a Preference object by ID
+      security:
+        - Bearer: []
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Preference'
+      parameters:
+        - name: PreferenceID
+          in: path
+          description: ID of Preference to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Preference response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Preference'
+        '404':
+          description: Preference not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    delete:
+      tags:
+      - preferences
+      description: Delete a preference object by ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: PreferenceID
+          in: path
+          description: ID of user to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: preference deleted
+        '404':
+          description: preference not found
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  /databases:
+    get:
+      tags:
+      - databases
+      summary: List all databases
+      operationId: listDatabases
+      security:
+        - Bearer: []
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Databases response
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Database'
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    post:
+      tags:
+      - databases
+      summary: Create a new database
+      description: Create a database object
+      security:
+        - Bearer: []
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Database'
+      responses:
+        '201':
+          description: database created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Database'
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  '/databases/{DatabaseID}':
+    get:
+      tags:
+      - databases
+      summary: Get all data of a database
+      description: Returns a database on a single ID
+      operationId: findDatabaseByID
+      security:
+        - Bearer: []
+      parameters:
+        - name: DatabaseID
+          in: path
+          description: ID of database to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: database response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    put:
+      tags:
+      - databases
+      summary: Update a database object
+      description: Update a database object by ID
+      security:
+        - Bearer: []
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Database'
+      parameters:
+        - name: DatabaseID
+          in: path
+          description: ID of database to fetch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: database response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Database'
+        '404':
+          description: Database not found
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    delete:
+      tags:
+      - databases
+      summary: Delete a database
+      description: Delete a database object by ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: DatabaseID
+          in: path
+          description: ID of database to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: database deleted
+        '404':
+          description: database not found
+        default:
+          description: unexpected error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  '/databases/{DatabaseID}/try':
+    post:
+      tags:
+      - databases
+      summary: Method for requesting to try queries for a certain database
+      description: Returns responses for the specified queries in the specified database. If the database is not available, it returns an error.
+      operationId: tryDatabaseByID
+      security:
+        - Bearer: []
+      parameters:
+        - name: DatabaseID
+          in: path
+          description: ID of database to try
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request_body:
+                  type: object
+                  properties:
+                    statement:
+                      type: string
+              required:
+                - request_body
+      responses:
+        '200':
+          description: database response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+servers:
+  - url: 'dabs'
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+  schemas:
+    User:
+      type: object
+      required:
+        - UserID
+      properties:
+        UserID:
+          type: integer
+          format: int32
+        Name:
+          type: string
+          example: Dorel Lucanu
+        Email:
+          type: string
+          example: dlucanu@info.uaic.ro
+        Password:
+          type: string
+          format: password
+        Preferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/Preference'
+    Preference:
+      required:
+        - PreferenceID
+      properties:
+        PreferenceID:
+          type: integer
+          format: int32
+        DatabaseID:
+          type: integer
+          format: int32
+        UserID:
+          type: integer
+          format: int32
+        LastUpdate:
+          type: string
+          format: date-time
+        ViewedCount:
+          type: integer
+          format: int32
+    Database:
+      required:
+        - DatabaseID
+      properties:
+        DatabaseID:
+          type: integer
+          format: int32
+        Label:
+          type: string
+        SupportsTyping:
+          type: boolean
+        SupportsIndex:
+          type: boolean
+        License:
+          type: string
+        HasDataSchema:
+          type: boolean
+        Model:
+          type: string
+          example: paradigma DB-ului
+        Platform:
+          type: string
+        Environment:
+          type: string
+          example: 'cloud,desktop,...'
+        SpecificUsages:
+          type: string
+        QueryLanguage:
+          type: string
+    ErrorModel:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+security:
+  - bearerAuth: []
