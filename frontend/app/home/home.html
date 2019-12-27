@@ -1,0 +1,106 @@
+<div layout="column" layout-xs="column" class="mainBackground">
+    <md-toolbar class="md-primary md-whiteframe-2dp" id="httpToolbar">
+        <div class="md-toolbar-tools" id="mainToolbar">
+            <div ng-click="HC.toggleMe()" ng-class="{menu: !HC.expanded, close: HC.expanded}" id="btn"><span><span
+                    class="s1"></span><span class="s2"></span><span class="s3"></span></span></div>
+
+            <h2 class="md-display-3" flex md-truncate id="appName">HTTP Cafe</h2>
+
+            <md-button class="md-icon-button" aria-label="Exit to App" ng-click="HC.logout()">
+                <md-icon>exit_to_app</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <section class="dashboards_list md-whiteframe-3dp" ng-class="{expanded:HC.expanded}">
+        <md-list-item ui-sref-active="active">
+            <a href ui-sref="home" ui-sref-opts="{reload: true}">
+                <p class="dashItems"><b>Home</b></p>
+            </a>
+        </md-list-item>
+        <md-list-item ui-sref-active="active">
+            <a href ui-sref="home.menu({user: HC.user})" ui-sref-opts="{reload: true}">
+                <p class="dashItems"><b>Menu</b> - We're here to satisfy all your needs!</p>
+            </a>
+        </md-list-item>
+        <md-list-item ui-sref-active="active">
+            <a href ui-sref="home.preferences({user: HC.user})">
+                <p class="dashItems"><b>Preferences</b> - Tell us more about you! </p>
+            </a>
+        </md-list-item>
+        <md-list-item ui-sref-active="active">
+            <a href ui-sref="home.payment({user: HC.user})">
+                <p class="dashItems"><b>Payment</b> - Eat up, drink up, pay up!</p>
+            </a>
+        </md-list-item>
+        <md-list-item ui-sref-active="active">
+            <a href ui-sref="home.stats({user: HC.user})">
+                <p class="dashItems"><b>Presentation</b> - Who's here? Is it a friend, a relative, someone you hate? If
+                    you
+                    wanna know, check this out!</p>
+            </a>
+        </md-list-item>
+        <md-list-item ui-sref-active="active">
+            <a href ui-sref="home.contact({user: HC.user})">
+                <p class="dashItems"><b>Review</b> - What did you enjoy? What sucked big time? Tell us what you think!
+                </p>
+            </a>
+        </md-list-item>
+    </section>
+
+
+    <div flex layout="column" layout-align="left" layout-xs="column" ui-view>
+        <md-whiteframe class="md-whiteframe-14dp whitefr" flex layout="column" layout-align="space-around stretch">
+            <div>
+                <md-toolbar class="md-theme-light">
+                    <h2 class="md-toolbar-tools">
+                        <span><strong>Daily Recommendation</strong> - Carefully crafted to suit your cravings!</span>
+                    </h2>
+                </md-toolbar>
+                <!--will contain randomly chosen items from each category and their pictures-->
+                <md-content>
+                    <div flex layout="row" layout-xs="column">
+                        <div flex layout-margin="5" layout="column" ng-repeat="item in HC.items">
+                            <md-card>
+                                <img ng-src={{item.path}} class="md-card-image" alt="Washed Out">
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline headlines">{{item.name}}</span>
+                                        <span class="md-subhead headlines">Only {{item.price}} &euro;</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                            </md-card>
+                        </div>
+                    </div>
+                </md-content>
+            </div>
+            <div>
+                <md-toolbar class="md-theme-light">
+                    <h2 class="md-toolbar-tools">
+                        <span><strong>Activity Stats</strong> - Feeding all your stalker-ish needs!</span>
+                    </h2>
+                </md-toolbar>
+                <md-content>
+                    <p flex="5"></p>
+                    <div flex layout="row" layout-xs="column">
+                        <div flex layout-margin="5" layout="column">
+                            <md-subheader class="md-primary">Our Orders Numbers for the past 7 days</md-subheader>
+                            <canvas id="line" class="chart chart-line" chart-data="HC.lineData"
+                                    chart-labels="HC.lineLabels" chart-series="HC.lineSeries"
+                                    chart-options="HC.lineOptions"
+                                    chart-dataset-override="HC.lineDatasetOverride" chart-click="HC.onGraphicClick">
+                            </canvas>
+                        </div>
+                        <div flex layout-margin="5" layout="column">
+                            <md-subheader class="md-primary">Top 7 most loyal customers in the past month</md-subheader>
+                            <canvas id="bar" class="chart chart-bar"
+                                    chart-data="HC.chartData" chart-labels="HC.chartLabels"
+                                    chart-series="HC.chartSeries">
+                            </canvas>
+                        </div>
+                    </div>
+                </md-content>
+            </div>
+
+        </md-whiteframe>
+    </div>
+</div>

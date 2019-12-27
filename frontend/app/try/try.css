@@ -1,0 +1,35 @@
+div md-list md-list-item .myButton{
+    background: #777D4D;
+}
+
+
+div md-list md-list-item .myButton:not([disabled]):hover{
+    background-color: rgba(187, 138, 39, 0.7);
+}
+
+div md-list md-list-item .myIcons{
+    color: white;
+}
+
+md-dialog .closeBtn, md-dialog .closeBtn.md-focused{
+    background: #777D4D !important;
+    color: white;
+}
+
+md-dialog md-dialog-actions button.closeBtn:hover{
+    background-color: rgba(187, 138, 39, 0.7) !important;
+
+}
+
+.smallIcons{
+    color: #777d4d;
+}
+
+.menuLinks{
+    color: #323232;
+}
+
+#menuSubheader{
+    background-color: white;
+    font-size:  20px;
+}

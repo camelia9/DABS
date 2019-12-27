@@ -1,0 +1,50 @@
+<md-whiteframe class="md-whiteframe-14dp whitefr">
+
+    <div layout="column" layout-padding layout-margin layout-align="start" layout-xs="column">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <span class="listHeader">Checklist</md-icon></span>
+            </div>
+        </md-toolbar>
+        <md-subheader ng-if="PayC.hasOrder===false">You have not ordered anything just yet, but you can go to the menu
+            page in order to check out our delicious products
+            <md-icon class="material-icons">sentiment_very_satisfied</md-icon>
+        </md-subheader>
+        <md-list ng-if="PayC.hasOrder === true">
+            <md-list-item class="md-3-line" ng-repeat="item in PayC.items">
+                <div class="md-list-item-text">
+                    <h3 class="headers">{{item.name}}</h3>
+                    <p class="info">{{item.price}} &euro; </p>
+                </div>
+            </md-list-item>
+        </md-list>
+
+    </div>
+    <div flex layout="column" layout-padding layout-align="start" layout-xs="column">
+
+        <form ng-submit="submit()" ng-controller="PaymentCtrl" ng-cloak>
+            <md-toolbar layout-margin>
+                <div class="md-toolbar-tools">
+                    <span class="listHeader">Summary and Payment</md-icon></span>
+                </div>
+            </md-toolbar>
+            <div layout="row">
+                <div flex layout="column" layout-padding >
+                    <md-subheader ng-if="PayC.hasOrder === false">Total amount to pay: {{PayC.orderValue}} &euro;</md-subheader>
+                    <h3 layout-padding layout-margin ng-if="PayC.hasOrder === true">Total amount to pay: {{PayC.orderValue}} &euro;</h3>
+                    <md-radio-group ng-if="PayC.hasOrder === true" layout-margin layout-padding ng-model="data.group1">
+
+                        <md-radio-button value="Cash" class="md-primary radioButton" ng-click="PayC.chooseMethod('cash')"><p>
+                            Cash </p></md-radio-button>
+                        <md-radio-button value="Card" class="radioButton" ng-click="PayC.chooseMethod('card')"><p>Debit or Credit Card </p>
+                        </md-radio-button>
+                    </md-radio-group>
+                </div>
+            </div>
+        </form>
+        <div layout="column" layout-align="start start" ng-if="PayC.hasOrder === true">
+            <md-button class="md-primary" id="payButton" ng-click="PayC.pay()">Pay Now!</md-button>
+        </div>
+    </div>
+</md-whiteframe>
+

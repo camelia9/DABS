@@ -1,0 +1,16 @@
+<div flex class="mainBackground" layout="row" layout-align="center center">
+    <p id="warnMessage" ng-if="LC.authStat===false">{{LC.authMessage}}</p>
+    <span flex></span>
+    <form name="loginForm" ng-submit="LC.goHome()" layout="column" >
+        <md-input-container class="md-accent">
+            <label id="usr">Username</label>
+            <input ng-required="true" ng-model="LC.user" type="text">
+        </md-input-container>
+        <md-button id="startButton" class="md-raised" type="submit">
+            Start
+                <md-icon id="startIcon">local_bar</md-icon>
+
+        </md-button>
+    </form>
+    <span flex></span>
+</div>

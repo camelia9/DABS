@@ -1,0 +1,18 @@
+md-whiteframe div md-toolbar div .listHeader{
+    color:white;
+}
+
+#payButton{
+    background: #777d4d;
+    bottom: 20px;
+    color:white;
+}
+
+#payButton:hover{
+    background: rgba(187, 138, 39, 0.7) !important;
+    color: white;
+}
+
+.radioButton:focus{
+    outline: 0;
+}

@@ -1,0 +1,54 @@
+md-input-container .md-input{
+    color:white;
+    border-color:white
+}
+
+.background-image {
+    background-image: url(https://www.transparenttextures.com/patterns/xv.png),linear-gradient(90deg, rgba(43, 93, 88, 0.83), rgb(193, 136, 20));
+    background-repeat: repeat;
+    background-position: center;
+    display: block;
+    filter: blur(5px);
+    min-height: 100%;
+    min-width: 100%;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: 1;
+}
+
+.content {
+    background: rgba(255, 255, 255, 0.35);
+    min-height: 300px;
+}
+
+
+#startButton{
+    background-color: rgba(255, 255, 255, 0.35);
+    color:white;
+    font-size: 20px;
+
+}
+
+
+#startIcon{
+    color: white;
+}
+
+#usr{
+    color:white;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+
+#warnMessage{
+    color: darkred;
+}
+
+#user{
+    margin-left: 80px;
+    margin-right: 80px;
+}

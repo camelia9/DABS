@@ -1,2 +1,6 @@
-
 public/.DS_Store
+.idea/
+.DS_Store
+frontend/.idea/
+frontend/vendor/
+frontend/img/

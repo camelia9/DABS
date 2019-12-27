@@ -1,0 +1,50 @@
+md-toast {
+    position: fixed !important;
+}
+
+.mainBackground{
+    background-repeat: repeat;
+    background-position: center;
+    background-image: url(../../img/xv.png),linear-gradient(90deg, rgba(43, 93, 88, 0.83), rgb(193, 136, 20)) ;
+    min-height: 100%;
+    min-width: 100%;
+}
+
+#httpToolbar, #httpToolbar div.md-toolbar-tools{
+    height: 64px;
+    max-height:64px;
+}
+
+.whitefr {
+    padding: 10px;
+    margin: 20px;
+    background-color: #ffffff;
+}
+
+md-card md-card-title md-card-title-text .md-subhead{
+    color: #c18814;
+}
+
+.md-card-title-media{
+    overflow: hidden;
+}
+
+md-card img {
+    width: 100%;
+    height: auto;
+}
+
+@media screen and (max-width: 599px) {
+    a, p, span, h3, .md-subheader-content, .headlines{
+        font-size: 3vw !important;
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 959px) {
+    a, p, span, h3, .md-subheader-content, .headlines {
+        font-size: 2vw !important;
+    }
+}
+/*a, p , span, h3, .md-subheader-content, .headlines{*/
+    /*font-size: 3.5vw !important;*/
+/*}*/

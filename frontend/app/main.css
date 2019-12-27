@@ -1,0 +1,135 @@
+#btn {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    color: #ffffff;
+    overflow: hidden;
+    transform: translateZ(0);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+
+
+#btn:focus {
+    outline: 0;
+    border: none;
+    color: rgba(0, 0, 0, 0);
+}
+
+#btn > span {
+    display: block;
+    position: relative;
+    width: 25px;
+    height: 25px;
+    top: 12px;
+    left: 12px;
+    transition: transform 0.2s ease;
+    overflow: hidden;
+}
+
+#btn > span > span {
+    display: block;
+    background-color: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    transition: all 0.5s ease;
+    border: 1px solid transparent;
+}
+
+#btn.menu > span > span.s1 {
+    transform: scale(1, 0.2) translate(0, 50px);
+}
+
+#btn.menu > span > span.s2 {
+    transform: scale(1, 0.2) translate(0, 0);
+}
+
+#btn.menu > span > span.s3 {
+    transform: scale(1, 0.2) translate(0, -50px);
+}
+
+#btn.close > span {
+    transform: rotate(45deg);
+}
+
+#btn.close > span > span {
+    transform: scale(1, 0.2);
+}
+
+#btn.close > span > span.s3 {
+    transform: scale(0.2, 1);
+}
+
+section.dashboards_list {
+    width: 93%;
+    padding: 0 3.5%;
+    position: absolute;
+    top:-500px;
+    transition: top 0.1s ease-out;
+    background-color: #777D4D;
+    opacity: 0.8;
+
+
+
+}
+
+section.dashboards_list.expanded {
+    top:64px;
+    z-index: 100000;
+}
+
+section.dashboards_list .container {
+    display: flex;
+    flex-flow: column;
+    margin: 45px 75px 45px 0;
+    padding: 0 75px 0 0;
+
+    border-right: 1px solid #5c5c5c;
+    user-select: none;
+}
+
+section.dashboards_list .container:last-of-type {
+    border: 0;
+}
+
+section.dashboards_list .container .list_header {
+    font-size: 22px;
+    color: white;
+    text-align: left;
+    margin: 15px 0 20px 0;
+    font-weight: bold;
+}
+
+section.dashboards_list .container .list-container {
+    max-height: 250px;
+    column-count: 1;
+    column-gap: 30px;
+}
+
+.dashItems{
+    color: white;
+}
+
+.dashItems:hover{
+    color: #ffab40;
+}
+
+#appName{
+    font-weight: bold;
+}
+
+/*.md-button:not([disabled]):hover {*/
+    /*background-color: inherit;*/
+/*}*/
+
+#popularItems{
+    width: 400px;
+}
+
+a{
+    text-decoration: none;
+}

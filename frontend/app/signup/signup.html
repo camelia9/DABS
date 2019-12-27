@@ -1,0 +1,49 @@
+<md-whiteframe class="md-whiteframe-14dp whitefr">
+    <md-nav-bar class="md-padding" md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links" hide-xs>
+        <md-nav-item md-nav-sref="home.menu.food" name="food">
+            Food
+        </md-nav-item>
+        <md-nav-item md-nav-sref="home.menu.sweets" name="sweets">
+            Sweets
+        </md-nav-item>
+        <md-nav-item md-nav-sref="home.menu.snacks" name="snacks">
+            Snacks
+        </md-nav-item>
+        <md-nav-item md-nav-sref="home.menu.drinks" name="drinks">
+            Drinks
+        </md-nav-item>
+    </md-nav-bar>
+
+
+    <div layout-align="left" layout="column" hide-gt-xs>
+        <md-menu>
+            <md-button aria-label="Menu" class="md-fab md-primary" ng-click="MC.openMenu($event, $mdMenu)">
+                <md-icon class="material_icons">expand_more</md-icon>
+            </md-button>
+            <md-menu-content hide-gt-xs>
+                <md-menu-item>
+                    <md-button>
+                        <a class="menuLinks" href ui-sref="home.menu.food">Food</a>
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button>
+                        <a href class="menuLinks" ui-sref="home.menu.sweets">Sweets</a>
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button>
+                        <a href class="menuLinks" ui-sref="home.menu.snacks">Snacks</a>
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button>
+                        <a href class="menuLinks" ui-sref="home.menu.drinks">Drinks</a>
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </div>
+
+    <div ui-view></div>
+</md-whiteframe>
