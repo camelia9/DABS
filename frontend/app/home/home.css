@@ -5,7 +5,7 @@ md-toast {
 .mainBackground{
     background-repeat: repeat;
     background-position: center;
-    background-image: url(../../img/xv.png),linear-gradient(90deg, rgba(43, 93, 88, 0.83), rgb(193, 136, 20)) ;
+    background-image: url(../../img/xv.png),linear-gradient(90deg, rgb(48, 63, 151), rgb(188, 94, 0)) ;
     min-height: 100%;
     min-width: 100%;
 }

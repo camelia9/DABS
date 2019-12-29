@@ -14,32 +14,10 @@ angular.module('Dabs', [
         function myAppConfig($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $mdThemingProvider) {
 
 
-            var myTheme = $mdThemingProvider.extendPalette('purple', {
-                '50': '#7b1fa2',
-                '100': '#7b1fa2',
-                '200': '#7b1fa2',
-                '300': '#7b1fa2',
-                '400': '#7b1fa2',
-                '500': '#7b1fa2',
-                '600': '#7b1fa2',
-                '700': '#7b1fa2',
-                '800': '#7b1fa2',
-                '900': '#7b1fa2',
-                'A100': '#7b1fa2',
-                'A200': '#7b1fa2',
-                'A400': '#7b1fa2',
-                'A700': '#7b1fa2'
-
-            });
-
-
-            $mdThemingProvider.definePalette('myTheme', myTheme);
-
-
             $mdThemingProvider.theme('default')
-                .primaryPalette('myTheme')
+                .primaryPalette('indigo')
 
-                .accentPalette('cyan');
+                .accentPalette('orange');
 
             $locationProvider.html5Mode(true);
 
@@ -64,16 +42,16 @@ angular.module('Dabs', [
 
                                     var result = response.data;
 
-                                    if (!result.user) {
+                                    if (!result.user_token) {
                                         deffered.resolve();
                                     }
 
                                     deffered.reject();
 
-                                    $cookies.put("user", result.user);
+                                    $cookies.put("user_token", result.user_token);
 
                                     return $state.go("home", {
-                                        user: result.user
+                                        user_token: result.user_token
                                     });
 
 

@@ -1,16 +1,50 @@
-<div flex class="mainBackground" layout="row" layout-align="center center">
-    <p id="warnMessage" ng-if="LC.authStat===false">{{LC.authMessage}}</p>
-    <span flex></span>
-    <form name="loginForm" ng-submit="LC.goHome()" layout="column" >
-        <md-input-container class="md-accent">
-            <label id="usr">Username</label>
-            <input ng-required="true" ng-model="LC.user" type="text">
-        </md-input-container>
-        <md-button id="startButton" class="md-raised" type="submit">
-            Start
-                <md-icon id="startIcon">local_bar</md-icon>
 
+<div flex class="mainBackground" layout="column" layout-align="center center">
+    <p id="warnMessage" ng-if="LC.authStat===false">{{LC.authMessage}}</p>
+    <span flex="20"></span>
+    <form name="loginForm" ng-submit="LC.goHome()" layout="column">
+        <img src="../../img/dabs.png" style="width: 150px"/>
+        <span flex="10"></span>
+        <div flex layout="row">
+            <md-icon class="loginIcons">person</md-icon>
+            <span flex="5"></span>
+            <md-input-container class="md-accent">
+                <label id="usr">Email</label>
+                <input ng-required="true" ng-model="LC.user" type="email">
+            </md-input-container>
+        </div>
+        <div flex layout="row">
+            <md-icon class="loginIcons">lock</md-icon>
+            <span flex="5"></span>
+            <md-input-container class="md-accent">
+                <label id="pass">Password</label>
+                <input ng-required="true" ng-model="LC.pass" type="password">
+            </md-input-container>
+        </div>
+        <md-button id="startButton" class="md-raised" type="submit">
+            Sign In
+            <md-icon id="startIcon">vpn_key</md-icon>
         </md-button>
     </form>
-    <span flex></span>
+    <p class="text">Don't have an account?</p>
+    <u><a class="text" ui-sref="signup">Create one now</a></u>
+    <span flex="5"></span>
+    <md-button>
+        <a class="oauth-container btn darken-4 white black-text" href="/users/google-oauth/">
+            <div class="left">
+                <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in"
+                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
+            </div>
+            Login with Google
+        </a>
+    </md-button>
+    <md-button>
+        <a href="/users/google-oauth/">
+            <div>
+                <img width="205" alt="Twitter sign-in"
+                     src="../../img/sign-in-with-twitter-gray-1-png-img-fullhd-medium.png.img.fullhd.medium.png"/>
+            </div>
+        </a>
+    </md-button>
+    <span flex="20"></span>
 </div>

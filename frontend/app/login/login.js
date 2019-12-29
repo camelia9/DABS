@@ -1,14 +1,25 @@
 angular.module('Dabs')
-    .controller('LoginCtrl', ['$rootScope', '$state', '$stateParams', '$http', 'config', '$cookies', function LoginController($rootScope, $state, $stateParams, $http, config, $cookies) {
+    .controller('LoginCtrl', ['$rootScope', '$state', '$stateParams', '$http', 'config', '$cookies', '$sha', function LoginController($rootScope, $state, $stateParams, $http, config, $cookies, $sha) {
         var self = this;
         this.user = "";
-        $cookies.put('review', false);
+        this.pass = "";
+
+        $sha.setConfig({
+            algorithm: 'SHA-256', // hashing algorithm to use
+            inputType: 'TEXT', // Input type
+            returnType: 'HEX', // Return type
+            secretType: 'TEXT' // Secret for HMAC
+        });
         this.authStat = true;
         this.goHome = function () {
-            if (self.user) {
-                var url = config.backend_url + '/login';
+
+            if (self.user && self.pass) {
+                var hashPass = $sha.hash(self.pass);
+                var url = config.backend_url + '/authentication';
                 var req = {
-                    "user": self.user
+                    "email": self.user,
+                    "password": hashPass,
+                    "auth_type": "own"
                 };
                 $http.post(url, req, {
                     headers: {
@@ -16,9 +27,9 @@ angular.module('Dabs')
                     }
                 })
                     .then(function (resp) {
-                        $cookies.put('user', self.user);
+                        $cookies.put('user_token', resp.user_token);
                         $state.go('home', {
-                            user: self.user
+                            user_token: self.user_token
                         });
                     }, function (err) {
                         console.log(err);
@@ -28,7 +39,7 @@ angular.module('Dabs')
 
             }
             else{
-                self.authMessage = "Please fill in an username!";
+                self.authMessage = "Please fill in the credentials!";
                 self.authStat = false;
             }
         }
