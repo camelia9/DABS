@@ -4,8 +4,8 @@ angular.module('Dabs', [
     'ngMaterial',
     'ui.router',
     'ngCookies',
-    'chart.js'
-
+    'chart.js',
+    'ngSha'
 ])
     .constant('config', {
         "backend_url": "http://localhost:3000"
