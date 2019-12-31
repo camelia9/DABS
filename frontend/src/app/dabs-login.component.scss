@@ -1,0 +1,44 @@
+.mainBackground {
+  background-repeat: repeat;
+  background-position: center;
+  background-image: url(../assets/xv.png), linear-gradient(90deg, rgb(48, 63, 151), rgb(188, 94, 0));
+}
+
+$my-special-color: orange;
+$my-special-color-lighter: #ffc504;
+
+.loginIcons {
+  color: $my-special-color;
+  margin-right: 5px;
+}
+
+.text, h2 {
+  color: $my-special-color;
+}
+
+:host ::ng-deep {
+
+  .mat-form-field-underline, .mat-form-field-ripple {
+    background-color: $my-special-color-lighter;
+  }
+
+  .mat-form-field-label {
+    color: $my-special-color-lighter;
+  }
+
+  input {
+    color: $my-special-color;
+    caret-color: $my-special-color;
+  }
+
+  .mat-focused {
+    .mat-form-field-underline, .mat-form-field-ripple {
+      background-color: $my-special-color-lighter;
+    }
+
+    .mat-form-field-label {
+      color: $my-special-color-lighter;
+    }
+  }
+
+}
