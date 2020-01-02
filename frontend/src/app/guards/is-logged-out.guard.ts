@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router} from '@angular/router';
 import {Observable} from 'rxjs';
+import {CookieService} from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IsLoggedOutGuard implements CanActivate {
-  constructor(private $router: Router) {
+  constructor(private $router: Router, public $cookies: CookieService) {
   }
 
   canActivate(
@@ -15,15 +16,12 @@ export class IsLoggedOutGuard implements CanActivate {
     if (this.isUserLoggedOut()) {
       return true;
     }
-    this.$router.navigate(['/'])
-      .then();
-    return false;
+    return this.$router.parseUrl('/home');
   }
 
   private isUserLoggedOut() {
-    // verify cookie or verify active session by IP
-
-    return true;
+    // verify cookie
+    return !this.$cookies.get('user_token');
   }
 
 }

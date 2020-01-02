@@ -1,0 +1,45 @@
+<div fxFlexFill class="back" fxLayout="column" fxLayoutAlign="center center">
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav mode="push" (keydown.escape)="close()">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <img src="../assets/dabs.png" alt="Icon"/>
+        <h2>Menu</h2>
+        <mat-nav-list>
+          <mat-list-item [routerLink]="['/home']" (click)="close()" class="menuItems">
+            <mat-icon matListIcon>home</mat-icon>
+            <a matLine>Home</a>
+          </mat-list-item>
+          <mat-list-item [routerLink]="['/recommend']" (click)="close()" class="menuItems">
+            <mat-icon matListIcon>check_circle</mat-icon>
+            <a matLine>Recommendation Tool</a>
+          </mat-list-item>
+          <mat-list-item [routerLink]="['/playground']" (click)="close()" class="menuItems">
+            <mat-icon matListIcon>play_arrow</mat-icon>
+            <a matLine>Playground</a>
+          </mat-list-item>
+        </mat-nav-list>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <mat-toolbar class="mainToolbar">
+        <mat-toolbar-row>
+          <p>
+            <button mat-icon-button aria-label="Menu" (click)="sidenav.toggle()">
+              <mat-icon>menu</mat-icon>
+            </button>
+          </p>
+          <span style="text-transform: capitalize;">{{$router.url | urlToState}}</span>
+          <span class="example-spacer"></span>
+          <button mat-icon-button aria-label="AccountInfo" [routerLink]="['/account']">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="Exit" (click)="logOut()">
+            <mat-icon>exit_to_app</mat-icon>
+          </button>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

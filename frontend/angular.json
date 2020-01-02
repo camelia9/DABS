@@ -132,6 +132,9 @@
       "flat": true,
       "spec": false,
       "prefix": ""
+    },
+    "@schematics/angular:pipe": {
+      "spec": false
     }
   }
 }

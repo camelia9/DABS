@@ -7,20 +7,38 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule, MatIconModule, MatInputModule, MatSnackBarModule} from '@angular/material';
-import {FormsModule} from '@angular/forms';
+import {
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule, MatListModule,
+  MatRadioModule,
+  MatSidenavModule,
+  MatSnackBarModule,
+  MatToolbarModule
+} from '@angular/material';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {CookieService} from 'ngx-cookie-service';
 import {DabsLoginComponent} from './dabs-login.component';
 import {DabsHomeComponent} from './dabs-home.component';
-import { DabsSignupComponent } from './dabs-signup.component';
+import {DabsSignupComponent} from './dabs-signup.component';
+import {DabsRecommendComponent} from './dabs-recommend.component';
+import {DabsPlaygroundComponent} from './dabs-playground.component';
+import {DabsMainComponent} from './dabs-main.component';
+import { UrlToStatePipe } from './pipes/url-to-state.pipe';
+import { DabsAccountComponent } from './dabs-account.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DabsLoginComponent,
     DabsHomeComponent,
-    DabsSignupComponent
+    DabsSignupComponent,
+    DabsRecommendComponent,
+    DabsPlaygroundComponent,
+    DabsMainComponent,
+    UrlToStatePipe,
+    DabsAccountComponent
   ],
   imports: [
     BrowserModule,
@@ -34,11 +52,15 @@ import { DabsSignupComponent } from './dabs-signup.component';
     FormsModule,
     MatInputModule,
     HttpClientModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSidenavModule,
+    MatRadioModule,
+    ReactiveFormsModule,
+    MatToolbarModule,
+    MatListModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  public static API_ENDPOINT = 'http://localhost:3000';
 }

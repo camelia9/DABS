@@ -4,8 +4,9 @@ import {CookieService} from 'ngx-cookie-service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AppModule} from './app.module';
-import { sha256 } from 'js-sha256';
+import {sha256} from 'js-sha256';
 import {Validators} from '@angular/forms';
+import {environment} from '../environments/environment';
 
 
 @Component({
@@ -53,17 +54,21 @@ export class DabsLoginComponent {
 
     console.log(this.req);
 
-    this.$http.post(AppModule.API_ENDPOINT + '/login', this.req)
-      .toPromise()
-      .then((res: any) => {
-        console.log(res);
-        this.$cookies.set('user_token', res.user_token);
-        this.$router.navigate(['/'])
-          .then();
-      })
-      .catch((err) => {
-        console.error(err);
-        this.openSnackBar('Login failed. Try again later.');
-      });
+    this.$cookies.set('user_token', 'mock-cookie');
+    this.$router.navigate(['/'])
+      .then();
+
+    // this.$http.post(environment.API_ENDPOINT + '/login', this.req)
+    //   .toPromise()
+    //   .then((res: any) => {
+    //     console.log(res);
+    //     this.$cookies.set('user_token', res.user_token);
+    //     this.$router.navigate(['/'])
+    //       .then();
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //     this.openSnackBar('Login failed. Try again later.');
+    //   });
   }
 }

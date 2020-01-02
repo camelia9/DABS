@@ -1,1 +1,43 @@
-<p>dabs-home works!</p>
+<div fxLayout="column" fxLayoutAlign="center center">
+  <mat-card id="mainCard">
+    <mat-card-title class="cardTitles">Database Trends Overview</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div class="statsCharts">
+          <canvas #dbCanvas></canvas>
+        </div>
+        <div class="statsCharts">
+          <canvas #envCanvas></canvas>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-title class="cardTitles">Database News Feed</mat-card-title>
+    <mat-card-content id="secondCard">
+      <div fxLayout="row wrap" fxLayoutAlign="center start" fxLayoutGap="30px">
+        <mat-card class="newsfeed-card" *ngFor="let feed of newsFeed" fxLayout="column">
+          <mat-card-header id="newsHeader" fxLayout="row" fxLayoutAlign="start center">
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>{{feed.title}}</mat-card-title>
+          </mat-card-header>
+          <div fxLayout="row" fxLayoutAlign="center start" class="image-wrapper">
+            <img mat-card-image [src]="feed.picture" alt="Photo of a Shiba Inu">
+          </div>
+          <mat-card-content>
+            <p class="feedDescription">
+              {{feed.shortDescription}}
+            </p>
+          </mat-card-content>
+          <span fxFlex></span>
+          <mat-card-actions fxLayout="row" fxLayoutAlign="end center">
+            <button mat-flat-button color="primary" (click)="openExternalLink(feed.url)">
+              OPEN
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>
