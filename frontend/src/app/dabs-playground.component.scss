@@ -1,0 +1,25 @@
+#mainCard {
+  margin: 50px 0;
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+$primary-color: #303f97;
+$accent-color-lighter: rgba(255, 132, 0, 0.6);
+$accent-color-text: orange;
+$accent-color: orange;
+
+.cardTitles {
+  padding: 15px;
+  background-color: $primary-color;
+  color: white;
+  font-weight: lighter;
+}
+
+.choiceDropDown {
+  margin-top: 50px;
+  margin-left: 30px;
+  margin-bottom: 30px;
+  color: $primary-color;
+  min-width: 300px;
+}

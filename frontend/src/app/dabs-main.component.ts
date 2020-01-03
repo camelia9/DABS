@@ -12,6 +12,8 @@ export class DabsMainComponent {
   constructor(public $router: Router, public $cookies: CookieService) {
   }
 
+  authType = this.$cookies.get('auth_type');
+
   @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
 
   close() {

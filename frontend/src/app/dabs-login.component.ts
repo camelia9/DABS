@@ -55,6 +55,7 @@ export class DabsLoginComponent {
     console.log(this.req);
 
     this.$cookies.set('user_token', 'mock-cookie');
+    this.$cookies.set('auth_type', 'own');
     this.$router.navigate(['/'])
       .then();
 

@@ -28,6 +28,10 @@ $accent-color: #FF9800;
   background-image: url(../assets/xv.png), linear-gradient(90deg, rgb(48, 63, 151), rgb(188, 94, 0));
 }
 
+#copyrightFooter{
+  color: $primary-color;
+}
+
 .mainToolbar{
   background-color: $primary-color;
   color: white;

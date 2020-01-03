@@ -1,1 +1,88 @@
-<p>dabs-recommend works!</p>
+<div fxLayout="column" fxLayoutAlign="center center">
+  <mat-card id="mainCard">
+    <mat-card-title class="cardTitles">Preference Wizard</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="50px" id="choiceForm">
+        <mat-form-field class="choiceDropDown" *ngFor="let filter of filters">
+          <mat-label style="color: #303f97;">{{filter.label}}</mat-label>
+          <mat-select [(value)]="filter.variable">
+            <mat-option style="color: #303f97;" *ngFor="let option of filter.options"
+                        [value]='option'>{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlexFill fxLayout="row" fxLayoutAlign="center center">
+        <button mat-raised-button color="primary" fxFlex id="submitButton">Submit</button>
+      </div>
+      <h2 class="spacingInCard" id="resultsTitle">Databases Results</h2>
+      <mat-accordion>
+        <mat-expansion-panel class="dbInfo" (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+                             *ngFor="let result of results">
+          <mat-expansion-panel-header id="dbInfoHeader">
+            <mat-panel-title style="color: #303f97; font-weight: bold">
+              {{result.label}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div fxLayout="column">
+            <mat-list role="list">
+              <mat-list-item style="color: #303f97;" role="listitem" *ngFor="let tag of result.tags">{{tag[0]}}
+                : {{tag[1]}}<mat-divider></mat-divider></mat-list-item>
+            </mat-list>
+            <div fxLayout="row" fxLayoutAlign="end end" style="margin-top: 30px" *ngIf="!showGraph">
+              <button mat-raised-button color="accent" (click)="toggleTheGraph()">View Graph</button>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="end end" style="margin-top: 30px" *ngIf="showGraph">
+              <button mat-raised-button color="accent" (click)="toggleTheGraph()">Hide Graph</button>
+            </div>
+            <div style="height: 900px" *ngIf="showGraph">
+              <ngx-graph
+                [autoCenter]=true
+                [enableZoom]=false
+                layout="dagre"
+                [animate]=true
+                class="chart-container"
+                [links]="graphLinks"
+                [nodes]="graphNodes"
+                [zoomToFit$]="zoomToFit$"
+              >
+                <ng-template #defsTemplate>
+                  <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
+                    <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+                  </svg:marker>
+                </ng-template>
+
+                <ng-template #clusterTemplate let-cluster>
+                  <svg:g class="node cluster">
+                    <svg:rect rx="5" ry="5" [attr.width]="cluster.dimension.width" [attr.height]="cluster.dimension.height" [attr.fill]="cluster.data.color" />
+                  </svg:g>
+                </ng-template>
+
+                <ng-template #nodeTemplate let-node>
+                  <svg:g class="node">
+                    <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height" [attr.fill]="node.data.color" />
+                    <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">{{node.label}}</svg:text>
+                  </svg:g>
+                </ng-template>
+
+                <ng-template #linkTemplate let-link>
+                  <svg:g class="edge">
+                    <svg:path class="line" stroke-width="2" marker-end="url(#arrow)">
+                    </svg:path>
+                    <svg:text class="edge-label" text-anchor="middle">
+                      <textPath class="text-path" [attr.href]="'#' + link.id" [style.dominant-baseline]="link.dominantBaseline" startOffset="50%">
+                        {{link.label}}
+                      </textPath>
+                    </svg:text>
+                  </svg:g>
+                </ng-template>
+              </ngx-graph>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-card-content>
+
+
+  </mat-card>
+
+</div>

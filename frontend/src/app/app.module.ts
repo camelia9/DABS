@@ -8,16 +8,18 @@ import {MatCardModule} from '@angular/material/card';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatButtonModule} from '@angular/material/button';
 import {
+  MatExpansionModule,
   MatFormFieldModule,
   MatIconModule,
-  MatInputModule, MatListModule,
-  MatRadioModule,
+  MatInputModule, MatListModule, MatOptionModule,
+  MatRadioModule, MatSelectModule,
   MatSidenavModule,
-  MatSnackBarModule,
+  MatSnackBarModule, MatStepperModule,
   MatToolbarModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {NgxGraphModule} from '@swimlane/ngx-graph';
 import {CookieService} from 'ngx-cookie-service';
 import {DabsLoginComponent} from './dabs-login.component';
 import {DabsHomeComponent} from './dabs-home.component';
@@ -27,6 +29,8 @@ import {DabsPlaygroundComponent} from './dabs-playground.component';
 import {DabsMainComponent} from './dabs-main.component';
 import { UrlToStatePipe } from './pipes/url-to-state.pipe';
 import { DabsAccountComponent } from './dabs-account.component';
+import { NgTerminalModule } from 'ng-terminal';
+
 
 @NgModule({
   declarations: [
@@ -57,7 +61,13 @@ import { DabsAccountComponent } from './dabs-account.component';
     MatRadioModule,
     ReactiveFormsModule,
     MatToolbarModule,
-    MatListModule
+    MatListModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatExpansionModule,
+    NgxGraphModule,
+    NgTerminalModule,
+    MatStepperModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]
