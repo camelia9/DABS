@@ -75,7 +75,8 @@ export class DabsPlaygroundComponent implements OnInit, AfterViewInit {
           this.urlEndpoint = environment.PLAYGROUND_API_ENDPOINT + '/psql';
         }
 
-        this.$http.post(this.urlEndpoint, {command: this.command})
+        // should replace with user token
+        this.$http.post(this.urlEndpoint, {command: this.command, authorizationToken: '791ab2c0-eb7f-4ba4-820c-0ad44d407958'})
           .toPromise()
           .then((res: any) => {
             console.log(res);
@@ -86,7 +87,7 @@ export class DabsPlaygroundComponent implements OnInit, AfterViewInit {
           })
           .catch((err) => {
             console.error(err);
-            this.openSnackBar('Login failed. Try again later.');
+            this.openSnackBar('Command could not be executed. Try again later.');
             this.child.write('\r\n$ ');
             this.command = '';
           });
