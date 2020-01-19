@@ -1,5 +1,8 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {NgTerminal} from 'ng-terminal';
+import {HttpClient} from '@angular/common/http';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'dabs-playground',
@@ -7,9 +10,26 @@ import {NgTerminal} from 'ng-terminal';
   styleUrls: ['./dabs-playground.component.scss']
 })
 export class DabsPlaygroundComponent implements OnInit, AfterViewInit {
+
+  constructor(private $http: HttpClient, private snackBar: MatSnackBar) {
+  }
+
   dbType = 'MongoDB';
+  command = '';
+  urlEndpoint = '';
+  durationInSeconds = 5;
+
 
   @ViewChild('term', {static: true}) child: NgTerminal;
+
+  openSnackBar(message: string) {
+    this.snackBar.open(
+      message,
+      null, {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: 'right',
+      });
+  }
 
   ngAfterViewInit() {
     this.child.write('\r\n' +
@@ -27,15 +47,12 @@ export class DabsPlaygroundComponent implements OnInit, AfterViewInit {
     this.child.write('\r\n');
     this.child.write('Welcome to Dabs Playground! You can test one of the ' +
       'dropdown databases by giving specific commands.');
-    if (this.dbType === 'MongoDB') {
-      this.child.write('\r\nType mongo --help to get started!');
-    }
-    if (this.dbType === 'Redis') {
-      this.child.write('\r\nType redis-cli --help to get started!');
-    }
     if (this.dbType === 'PostgreSQL') {
-      this.child.write('\r\nType psql --help to get started!');
+      this.child.write('\r\nType \\help to get started!');
+    } else {
+      this.child.write('\r\nType help to get started!');
     }
+
     this.child.write('\r\n\r\n$ ');
 
     this.child.keyEventInput.subscribe(e => {
@@ -45,19 +62,44 @@ export class DabsPlaygroundComponent implements OnInit, AfterViewInit {
 
       if (ev.keyCode === 13) {
         // send data to backend
-        this.child.write('\r\n$ ');
+
+        if (this.dbType === 'MongoDB') {
+          this.urlEndpoint = environment.PLAYGROUND_API_ENDPOINT + '/mongo';
+        }
+
+        if (this.dbType === 'Redis') {
+          this.urlEndpoint = environment.PLAYGROUND_API_ENDPOINT + '/redis';
+        }
+
+        if (this.dbType === 'PostgreSQL') {
+          this.urlEndpoint = environment.PLAYGROUND_API_ENDPOINT + '/psql';
+        }
+
+        this.$http.post(this.urlEndpoint, {command: this.command})
+          .toPromise()
+          .then((res: any) => {
+            console.log(res);
+            this.child.write('\r\n');
+            this.child.write(res.data);
+            this.child.write('\r\n$ ');
+            this.command = '';
+          })
+          .catch((err) => {
+            console.error(err);
+            this.openSnackBar('Login failed. Try again later.');
+            this.child.write('\r\n$ ');
+            this.command = '';
+          });
       } else if (ev.keyCode === 8) {
         // Do not delete the prompt
         if (this.child.underlying.buffer.cursorX > 2) {
           this.child.write('\b \b');
         }
       } else if (printable) {
+        this.command += e.key;
         this.child.write(e.key);
       }
     });
-  }
-
-  constructor() {
   }
 
   ngOnInit() {
@@ -79,14 +121,10 @@ export class DabsPlaygroundComponent implements OnInit, AfterViewInit {
       '                                                                                         \r\n');
     this.child.write('\rWelcome to Dabs Playground! You can test one of the ' +
       'dropdown databases by giving specific commands.');
-    if (this.dbType === 'MongoDB') {
-      this.child.write('\r\nType mongo --help to get started!');
-    }
-    if (this.dbType === 'Redis') {
-      this.child.write('\r\nType redis-cli --help to get started!');
-    }
     if (this.dbType === 'PostgreSQL') {
-      this.child.write('\r\nType psql --help to get started!');
+      this.child.write('\r\nType \\help to get started!');
+    } else {
+      this.child.write('\r\nType help to get started!');
     }
     this.child.write('\r\n\r\n$ ');
   }

@@ -43,20 +43,20 @@ export class DabsSignupComponent {
 
     console.log(this.req);
 
-    this.$http.post(environment.API_ENDPOINT + '/users', this.req)
-      .toPromise()
-      .then((res: any) => {
-        console.log(res);
-        this.openSnackBar('Signed up.. Redirecting to login...');
-        setTimeout(() => {
-          this.$router.navigate(['/login'])
-            .then();
-        }, 6000);
-      })
-      .catch((err) => {
-        console.error(err);
-        this.openSnackBar('Sign up failed. Try again later.');
-      });
+    // this.$http.post(environment.API_ENDPOINT + '/users', this.req)
+    //   .toPromise()
+    //   .then((res: any) => {
+    //     console.log(res);
+    //     this.openSnackBar('Signed up.. Redirecting to login...');
+    //     setTimeout(() => {
+    //       this.$router.navigate(['/login'])
+    //         .then();
+    //     }, 6000);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //     this.openSnackBar('Sign up failed. Try again later.');
+    //   });
   }
 
   openSnackBar(message: string) {

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  API_ENDPOINT: 'http://localhost:3000'
+  PLAYGROUND_API_ENDPOINT: 'http://ec2-18-197-191-59.eu-central-1.compute.amazonaws.com:3000/playground'
 };
 
 /*
