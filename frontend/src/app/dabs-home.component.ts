@@ -1,5 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Chart} from 'chart.js';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {environment} from '../environments/environment';
+import {CookieService} from 'ngx-cookie-service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'dabs-home',
@@ -12,10 +16,12 @@ export class DabsHomeComponent implements OnInit {
   private envChart: Chart;
   private dbChart: Chart;
   private chartColors: any;
-  private newsFeed: any;
+  private newsFeed = JSON.parse(localStorage.getItem('CACHED_DATA') || '[]');
+  private headers: HttpHeaders;
+  durationInSeconds = 5;
 
 
-  constructor() {
+  constructor(private $http: HttpClient, private $cookies: CookieService, private snackBar: MatSnackBar) {
   }
 
 
@@ -32,6 +38,21 @@ export class DabsHomeComponent implements OnInit {
       purple: 'rgb(153, 102, 255)',
       grey: 'rgb(201, 203, 207)'
     };
+
+    // this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/metrics', {
+    //   headers: {
+    //     'X-Client-ID': this.$cookies.get('user_token')
+    //   }
+    // })
+    //   .toPromise()
+    //   .then((res: any) => {
+    //     console.log(res);
+    //     //format chart data
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //     this.openSnackBar('Retrieving chart data failed. Try again later.');
+    //   });
 
     const dbData = {
       labels: ['Redis', 'MongoDB', 'OracleDB', 'MySQL', 'GraphDB'],
@@ -92,36 +113,48 @@ export class DabsHomeComponent implements OnInit {
 
   }
 
+  openSnackBar(message: string) {
+    this.snackBar.open(
+      message,
+      null, {
+        duration: this.durationInSeconds * 1000,
+        horizontalPosition: 'right',
+      });
+  }
+
   openExternalLink(url: string) {
     window.open(url, '_blank');
   }
 
   renderNewsFeed() {
-    // implement request to NewsFeed API
 
-    this.newsFeed = [
-      {
-        picture: 'https://miro.medium.com/max/2760/1*kPKoXmHBDmGthbah-0549A.png',
-        title: 'What happened to Hadoop',
-        shortDescription: 'Hadoop was often called ‘the next big thing’ in enterprise IT, until it wasn’t. ' +
-          'A former write for Gigaom takes a high level look at the trends that pushed Hadoop out of the spotlight.',
-        url: 'https://architecht.io/what-happened-to-hadoop-211aa52a297'
-      },
-      {
-        picture: 'https://community-cdn-digitalocean-com.global.ssl.fastly.net/assets/tutorials/images/large/' +
-          'Database-Mostov_v4.1_twitter-_-facebook.png?1549487063',
-        title: 'Understanding Database Sharding',
-        shortDescription: 'Goes over what sharding is, some of its main benefits and drawbacks, and also a few common sharding approaches.',
-        url: 'https://www.digitalocean.com/community/tutorials/understanding-database-sharding'
-      },
-      {
-        picture: '../../assets/newsfeed-default-pix.jpg',
-        title: 'Comparing Database Types: How Database Types Evolved to Meet Different Needs',
-        shortDescription: 'NoSQL, relational, NewSQL, graph, and more.. Many types of databases exist, ' +
-          'each with their own benefits. This post compares different approaches and what makes each one tick.',
-        url: 'https://www.prisma.io/blog/comparison-of-database-models-1iz9u29nwn37'
+    console.log(this.headers);
+    this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/newsfeed', {
+      headers: {
+        'X-Client-ID': this.$cookies.get('user_token')
       }
-    ];
+    })
+      .toPromise()
+      .then((res: any) => {
+        console.log(res);
+        const defaults = [
+          '../../assets/newsfeed-default-pix.jpg',
+          '../../assets/newsfeed-2.jpg',
+          '../../assets/newsfeed-3.png',
+          '../../assets/newsfeed-4.png',
+          '../../assets/newsfeed-5.jpg'
+        ];
+        this.newsFeed = res.map((item) => {
+          const num = Math.floor(Math.random() * 4);
+          item.picture = item.hasOwnProperty('picture') ? item.picture : defaults[num];
+          return item;
+        });
+        localStorage.setItem('CACHED_DATA', JSON.stringify(this.newsFeed));
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Retrieving news feed failed. Try again later.');
+      });
   }
 
 
@@ -131,4 +164,16 @@ export class DabsHomeComponent implements OnInit {
   }
 
 
+  handleNoIMg(feed: any) {
+    const defaults = [
+      '../../assets/newsfeed-default-pix.jpg',
+      '../../assets/newsfeed-2.jpg',
+      '../../assets/newsfeed-3.png',
+      '../../assets/newsfeed-4.png',
+      '../../assets/newsfeed-5.jpg'
+    ];
+    const num = Math.floor(Math.random() * 4);
+
+    feed.picture = defaults[num];
+  }
 }

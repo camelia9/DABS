@@ -21,9 +21,9 @@
             <mat-card-title>{{feed.title}}</mat-card-title>
           </mat-card-header>
           <div fxLayout="row" fxLayoutAlign="center start" class="image-wrapper">
-            <img mat-card-image [src]="feed.picture" alt="Photo of a Shiba Inu">
+            <img mat-card-image [src]="feed.picture" alt="Photo of a Shiba Inu" (error)="handleNoIMg(feed)">
           </div>
-          <mat-card-content>
+          <mat-card-content class="descriptionF">
             <p class="feedDescription">
               {{feed.shortDescription}}
             </p>

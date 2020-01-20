@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {CookieService} from 'ngx-cookie-service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -19,6 +19,7 @@ import {environment} from '../environments/environment';
 export class DabsLoginComponent {
 
   durationInSeconds = 5;
+  private headers: HttpHeaders;
 
   constructor(private $http: HttpClient, private $cookies: CookieService, private $router: Router, private snackBar: MatSnackBar) {
   }
@@ -54,12 +55,13 @@ export class DabsLoginComponent {
 
     console.log(this.req);
 
-    this.$cookies.set('user_token', 'mock-cookie');
+    this.$cookies.set('user_token', '791ab2c0-eb7f-4ba4-820c-0ad44d407959');
     this.$cookies.set('auth_type', 'own');
     this.$router.navigate(['/'])
       .then();
 
-    // this.$http.post(environment.API_ENDPOINT + '/login', this.req)
+
+    // this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/login', this.req)
     //   .toPromise()
     //   .then((res: any) => {
     //     console.log(res);

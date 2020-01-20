@@ -18,7 +18,7 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {NgxGraphModule} from '@swimlane/ngx-graph';
 import {CookieService} from 'ngx-cookie-service';
 import {DabsLoginComponent} from './dabs-login.component';
@@ -27,9 +27,10 @@ import {DabsSignupComponent} from './dabs-signup.component';
 import {DabsRecommendComponent} from './dabs-recommend.component';
 import {DabsPlaygroundComponent} from './dabs-playground.component';
 import {DabsMainComponent} from './dabs-main.component';
-import { UrlToStatePipe } from './pipes/url-to-state.pipe';
-import { DabsAccountComponent } from './dabs-account.component';
-import { NgTerminalModule } from 'ng-terminal';
+import {UrlToStatePipe} from './pipes/url-to-state.pipe';
+import {DabsAccountComponent} from './dabs-account.component';
+import {NgTerminalModule} from 'ng-terminal';
+import {AddTokenInterceptor} from './http.interceptor';
 
 
 @NgModule({
@@ -69,7 +70,14 @@ import { NgTerminalModule } from 'ng-terminal';
     NgTerminalModule,
     MatStepperModule
   ],
-  providers: [CookieService],
+  providers: [
+    CookieService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AddTokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

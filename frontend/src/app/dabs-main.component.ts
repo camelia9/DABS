@@ -21,6 +21,20 @@ export class DabsMainComponent {
   }
 
   logOut() {
+    // this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/logout', {
+    //   headers: {
+    //     'X-Client-ID': this.$cookies.get('user_token')
+    //   }
+    // })
+    //   .toPromise()
+    //   .then((res: any) => {
+    //     console.log(res);
+    //     // format chart data
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //     this.openSnackBar('Log out failed. Try again later.');
+    //   });
     this.$cookies.delete('user_token');
     this.$router.navigate(['/login'])
       .then();

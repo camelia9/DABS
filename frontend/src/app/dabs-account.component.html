@@ -4,7 +4,7 @@
     <mat-card-content style="margin: 20px 30px">
       <mat-horizontal-stepper [linear]=false #stepper fxFlexFill style="background: transparent">
         <mat-step [stepControl]="nameForm">
-          <form [formGroup]="nameForm">
+          <form [formGroup]="nameForm" (submit)="updateAccount()">
             <ng-template matStepLabel>Update your name</ng-template>
             <mat-form-field style="margin-left: 15px">
               <input matInput placeholder="Last name, First name" formControlName="nameCtrl" required>
@@ -79,7 +79,7 @@
       <div style="margin: 30px">
         <h3 id="warningText">Deleting an account is an irreversible action. You will no longer be able to access this application without creating a new account.</h3>
       </div>
-      <button id="deleteButton" style="margin: 0 30px" mat-flat-button color="accent">
+      <button id="deleteButton" style="margin: 0 30px" mat-flat-button color="accent" (click)="deleteAccount()">
         Delete account
         <mat-icon>delete</mat-icon>
       </button>

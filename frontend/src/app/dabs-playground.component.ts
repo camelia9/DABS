@@ -3,6 +3,7 @@ import {NgTerminal} from 'ng-terminal';
 import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {environment} from '../environments/environment';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'dabs-playground',
@@ -11,7 +12,7 @@ import {environment} from '../environments/environment';
 })
 export class DabsPlaygroundComponent implements OnInit, AfterViewInit {
 
-  constructor(private $http: HttpClient, private snackBar: MatSnackBar) {
+  constructor(private $http: HttpClient, private $cookies: CookieService, private snackBar: MatSnackBar) {
   }
 
   dbType = 'MongoDB';
@@ -76,7 +77,7 @@ export class DabsPlaygroundComponent implements OnInit, AfterViewInit {
         }
 
         // should replace with user token
-        this.$http.post(this.urlEndpoint, {command: this.command, authorizationToken: '791ab2c0-eb7f-4ba4-820c-0ad44d407958'})
+        this.$http.post(this.urlEndpoint, {command: this.command, authorizationToken: this.$cookies.get('user_token')})
           .toPromise()
           .then((res: any) => {
             console.log(res);
