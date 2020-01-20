@@ -1,0 +1,174 @@
+/login
+
+Method: POST
+
+Params: 
+	- email
+	- password - sha256 pe parola
+	- auth_type - valori: 'own', 'google'
+
+Response: 
+	- user_token - UUID care va fi folosit la toate apelurile urmatoare si va fi validat de authorizer
+	- status: 0
+
+
+/users - signupul
+
+Method: POST
+
+Params:
+	- email
+	- name
+	- password - sha256 pe parola
+
+Response:
+	- ma intereseaza sa vina 200
+	- status: 0
+
+
+
+/metrics
+
+Method: GET
+
+Response:
+	- obiect JSON cu 3 proprietati:
+		*  "status": 0
+		* "stats1" (procentul de preferinte din total pentru bazele de date existente in preferinte) - contine un obiect de urmatoarea forma:
+			{
+				"MongoDB": 30,
+				"Redis": 20,
+				.....
+			}
+		* "stats2" (procentul de preferinte din total pentru Running Environments/Query Language existente in preferinte) - contine un obiect de urmatoarea forma:
+			{
+				"Cloud": 40,
+				"Web": 40,
+				"Desktop": 20
+			}
+
+/newsfeed
+
+Method: GET
+
+Response:
+	{
+		status: 0,
+		data: [
+	      {
+	        picture: 'https://miro.medium.com/max/2760/1*kPKoXmHBDmGthbah-0549A.png',
+	        title: 'What happened to Hadoop',
+	        shortDescription: 'Hadoop was often called ‘the next big thing’ in enterprise IT, until it wasn’t. ' +
+	          'A former write for Gigaom takes a high level look at the trends that pushed Hadoop out of the spotlight.',
+	        url: 'https://architecht.io/what-happened-to-hadoop-211aa52a297'
+	      },
+	      {
+	        picture: 'https://community-cdn-digitalocean-com.global.ssl.fastly.net/assets/tutorials/images/large/' +
+	          'Database-Mostov_v4.1_twitter-_-facebook.png?1549487063',
+	        title: 'Understanding Database Sharding',
+	        shortDescription: 'Goes over what sharding is, some of its main benefits and drawbacks, and also a few common sharding approaches.',
+	        url: 'https://www.digitalocean.com/community/tutorials/understanding-database-sharding'
+	      },
+	      {
+	        picture: '../../assets/newsfeed-default-pix.jpg',
+	        title: 'Comparing Database Types: How Database Types Evolved to Meet Different Needs',
+	        shortDescription: 'NoSQL, relational, NewSQL, graph, and more.. Many types of databases exist, ' +
+	          'each with their own benefits. This post compares different approaches and what makes each one tick.',
+	        url: 'https://www.prisma.io/blog/comparison-of-database-models-1iz9u29nwn37'
+	      }
+	    ]
+	}
+
+
+/sparql
+
+Method: GET
+
+Params: 
+
+{
+	hasDataModel: 'DocumentDataModel',
+	hasDataSchema: 'Flexible',
+	hasLicense: 'OpenSource',
+	supportsIndexing: 'true1',
+	hasReplicationProtocol: 'PeerToPeerAsynchronousReplication',
+	supportsTyping: 'true2',
+	platform: 'Linux',
+	environment: 'Cloud'
+}
+
+
+Response: Un array JSON-LD de forma (cu mai multe elemente + proprietatile din tags ar trebui sa fie adnotate - JSON-LD):
+
+			[{
+			    label: 'MongoDB',
+			    tags: {
+			      name: 'MongoDB',
+			      hasDataModel: 'DocumentDataModel',
+			      hasDataSchema: 'Flexible',
+			      hasLicense: 'OpenSource',
+			      supportsIndexing: 'true1',
+			      hasReplicationProtocol: 'PeerToPeerAsynchronousReplication',
+			      supportsTyping: 'true2',
+			      platform: 'Linux',
+			      environment: 'Cloud'
+			    }
+			  }]
+
+
+
+/users/{userid} - face update la un user
+
+Method: PUT
+
+Params:
+	- email
+	- name
+	- password - sha256 pe parola
+
+Response:
+{
+	status: 0
+}
+
+
+
+/users/{userID} - sterge un user
+
+Method: DELETE
+
+Response:
+{
+	status: 0
+}
+
+
+
+/user/{userID} - info despre un user
+
+Method: GET
+
+
+Response - SHIT adnotat semantic:
+
+{
+	status: 0,
+	data: {
+		email: "blabla"
+		name: "bllabla"
+	}
+	
+}
+
+
+/logout/{userToken} - sterge din dynamo tokenul
+
+Method: GET
+
+Response:
+
+{
+	status: 0
+}
+
+
