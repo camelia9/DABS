@@ -1,13 +1,13 @@
-/login
+/login - trebuie apelat GET /users, luate info despre user (userID), generat un UUID v4 token (ala care se intoarce in raspuns) si asta sa fie stocat in dynamo
 
 Method: POST
 
-Params: 
+Params:
 	- email
 	- password - sha256 pe parola
 	- auth_type - valori: 'own', 'google'
 
-Response: 
+Response:
 	- user_token - UUID care va fi folosit la toate apelurile urmatoare si va fi validat de authorizer
 	- status: 0
 
@@ -27,7 +27,7 @@ Response:
 
 
 
-/metrics
+/metrics - trebuie sa faca GET /preferences si sa le proceseze ca sa scoata metricile din raspuns
 
 Method: GET
 
@@ -46,6 +46,53 @@ Response:
 				"Web": 40,
 				"Desktop": 20
 			}
+
+
+/preferences
+
+Method: GET
+
+Query Params:
+	*startDate - timestamp
+	*endDate - timestamp
+ - ca sa putem filtra preferintele in functie de timp
+
+Response:
+
+ - json-ld-ul cu preferinte
+
+	{
+		status: 0,
+		data: [
+			{
+				"userID":"...",
+				"databaseName": "...",
+				"filtruPtADouaPreferinta": "...",
+				"preferenceID": "...",
+				"databaseID": "...", //maybe
+				"timestamp": "..."
+			}
+
+		]
+
+
+/preferences - la fiecare query /sparql ar trebui caa primele 3 raspunsuri sa se adauge la preferinte
+
+Method: POST
+
+Body:
+{
+	"userID":"...",
+	"databaseName": "...",
+	"filtruPtADouaPreferinta": "...",
+	"preferenceID": "...",
+	"databaseID": "...", //maybe
+	"timestamp": "..."
+}
+
+
+
+
 
 /newsfeed
 
@@ -84,7 +131,7 @@ Response:
 
 Method: GET
 
-Params: 
+Params:
 
 {
 	hasDataModel: 'DocumentDataModel',
@@ -157,7 +204,7 @@ Response - SHIT adnotat semantic:
 		email: "blabla"
 		name: "bllabla"
 	}
-	
+
 }
 
 
