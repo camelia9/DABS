@@ -29,7 +29,7 @@ export class DabsLoginComponent {
     password: ''
   };
 
-  private req: { password: any; auth_type: string; email: any };
+  private req: { password: any; email: any };
 
   openSnackBar(message: string) {
     this.snackBar.open(
@@ -49,29 +49,24 @@ export class DabsLoginComponent {
 
     this.req = {
       email: this.authFormModel.email,
-      password: sha256(this.authFormModel.password),
-      auth_type: 'own'
+      password: this.authFormModel.password
     };
 
     console.log(this.req);
 
-    this.$cookies.set('user_token', '791ab2c0-eb7f-4ba4-820c-0ad44d407959');
-    this.$cookies.set('auth_type', 'own');
-    this.$router.navigate(['/'])
-      .then();
 
-
-    // this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/login', this.req)
-    //   .toPromise()
-    //   .then((res: any) => {
-    //     console.log(res);
-    //     this.$cookies.set('user_token', res.user_token);
-    //     this.$router.navigate(['/'])
-    //       .then();
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     this.openSnackBar('Login failed. Try again later.');
-    //   });
+    this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/login', this.req)
+      .toPromise()
+      .then((res: any) => {
+        console.log(res);
+        this.$cookies.set('user_token', res.user_token);
+        this.$cookies.set('user_id', res.user_id);
+        this.$router.navigate(['/'])
+          .then();
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Login failed. Try again later.');
+      });
   }
 }

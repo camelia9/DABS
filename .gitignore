@@ -5,4 +5,5 @@ frontend/.idea
 .idea/
 .DS_Store
 backend-geo/playground/node_modules
+backend-geo/authentication/node_modules
 

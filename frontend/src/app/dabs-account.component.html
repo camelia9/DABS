@@ -7,7 +7,7 @@
           <form [formGroup]="nameForm" (submit)="updateAccount()">
             <ng-template matStepLabel>Update your name</ng-template>
             <mat-form-field style="margin-left: 15px">
-              <input matInput placeholder="Last name, First name" formControlName="nameCtrl" required>
+              <input matInput placeholder="Last name, First name" formControlName="nameCtrl">
             </mat-form-field>
             <p></p>
             <div>
@@ -19,7 +19,7 @@
           <form [formGroup]="emailForm">
             <ng-template matStepLabel>Update your email</ng-template>
             <mat-form-field style="margin-left: 15px">
-              <input matInput placeholder="Email" formControlName="emailCtrl" required>
+              <input matInput placeholder="Email" formControlName="emailCtrl">
             </mat-form-field>
             <p></p>
             <div>
@@ -33,7 +33,7 @@
             <ng-template matStepLabel>Update your password</ng-template>
             <mat-form-field style="margin-left: 15px">
               <input matInput placeholder="Password" type="password" name="password" formControlName="passCtrl"
-                     required>
+                     >
             </mat-form-field>
             <p></p>
             <div>
@@ -46,7 +46,7 @@
           <form [formGroup]="passCfForm">
             <ng-template matStepLabel>Confirm your password</ng-template>
             <mat-form-field style="margin-left: 15px">
-              <input matInput placeholder="Password" type="password" name="password" formControlName="passCfCtrl" required>
+              <input matInput placeholder="Password" type="password" name="password" formControlName="passCfCtrl" >
             </mat-form-field>
             <p></p>
             <div>

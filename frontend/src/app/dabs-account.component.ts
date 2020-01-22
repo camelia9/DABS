@@ -18,22 +18,39 @@ export class DabsAccountComponent implements OnInit {
   passCfForm: FormGroup;
   durationInSeconds = 5;
 
-  constructor(private _formBuilder: FormBuilder, private $http: HttpClient,  private $cookies: CookieService, private snackBar: MatSnackBar) {
+  constructor(private _formBuilder: FormBuilder, private $http: HttpClient, private $cookies: CookieService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
     this.nameForm = this._formBuilder.group({
-      nameCtrl: ['', Validators.required]
+      nameCtrl: ['', Validators.nullValidator]
     });
     this.emailForm = this._formBuilder.group({
-      emailCtrl: ['', Validators.required]
+      emailCtrl: ['', Validators.nullValidator]
     });
     this.passForm = this._formBuilder.group({
-      passCtrl: ['', Validators.required]
+      passCtrl: ['', Validators.nullValidator]
     });
     this.passCfForm = this._formBuilder.group({
-      passCfCtrl: ['', Validators.required]
+      passCfCtrl: ['', Validators.nullValidator]
     });
+    // make request to get user data
+    this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/users',
+      {
+        params: {
+          user_id: this.$cookies.get('user_id')
+        }
+      })
+      .toPromise()
+      .then((res: any) => {
+        console.log(res);
+        this.nameForm.get('nameCtrl').patchValue(res.name);
+        this.emailForm.get('emailCtrl').patchValue(res.email);
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Retrieving user data failed. Try again later.');
+      });
   }
 
   openSnackBar(message: string) {
