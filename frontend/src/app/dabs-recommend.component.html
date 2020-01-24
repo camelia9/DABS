@@ -45,13 +45,13 @@
                     <mat-icon style="color: #303f97;">whatshot</mat-icon>
                     <p style="color: #303f97;">{{prop.label}} : </p>
                     <ng-container *ngIf="prop.values.length === 1">
-                      <p style="color: #ff8433;">{{prop.values[0]}}</p>
+                      <p style="color: #ff8433;">{{prop.values[0].value}}</p>
                     </ng-container>
                     <mat-divider></mat-divider>
                   </mat-list-item>
                   <mat-list style="margin-left:30px" *ngIf="prop.values.length > 1">
                     <div *ngFor="let propV of prop.values">
-                      <mat-list-item style="color: #ff8433">{{ propV }}</mat-list-item>
+                      <mat-list-item style="color: #ff8433">{{ propV.value }}</mat-list-item>
                     </div>
                   </mat-list>
 

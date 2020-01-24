@@ -198,22 +198,27 @@ type QueryResultElem = Record<string, string | {
 
 type QueryResultType = Record<string, QueryResultElem>;
 
+interface UIDataElem {
+  name: string;
+  properties: Array<{
+    label: string;
+    values: Array<{
+      id: string;
+      value: string;
+    }>;
+  }>;
+  nodes: Array<Node>;
+  edges: Array<Edge>;
+  jsonLD: QueryResultElem;
+}
+
 @Component({
   selector: 'dabs-recommend',
   templateUrl: './dabs-recommend.component.html',
   styleUrls: ['./dabs-recommend.component.scss']
 })
 export class DabsRecommendComponent implements OnInit {
-  public dbData: Array<{
-    name: string;
-    properties: Array<{
-      label: string;
-      values: Array<string>;
-    }>
-    nodes: Array<Node>;
-    edges: Array<Edge>;
-    jsonLD: QueryResultElem;
-  }>;
+  public dbData: Array<UIDataElem>;
 
   public loadingQuery = false;
   public queriedAtLeastOnce = false;
@@ -290,45 +295,50 @@ export class DabsRecommendComponent implements OnInit {
     this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/sparql', req)
       .toPromise()
       .then((res: QueryResultType) => {
-        const tempData = [];
+        this.dbData = [];
         for (const dbName in res) {
           const dbO = res[dbName];
-          const properties = [];
+          const properties: UIDataElem['properties'] = [];
           for (const label in dbO) {
             const labelValue = dbO[label];
             if (typeof labelValue === 'string') {
               properties.push({
                 label,
-                values: [labelValue]
+                values: [{
+                  value: labelValue,
+                  id: label
+                }]
               });
               continue;
             }
 
             properties.push({
               label,
-              values: labelValue.values.map(lVV => lVV.value)
+              values: labelValue.values.map(lVV => ({
+                value: lVV.value,
+                id: lVV['@id']
+              }))
             });
           }
-          tempData.push({
+          this.dbData.push({
             name: dbName,
             properties,
             nodes: [
-              ...(flatten(properties.map(
-                (o) => o.values.map(oV => ({label: oV, id: this.sanitizeNodeId(oV)}))
+              ...(flatten(properties.filter(p => p.label !== '@id' && p.label !== '@type').map(
+                (o) => o.values.map(oV => ({label: oV.value, id: this.sanitizeNodeId(oV.id)}))
               )) as Array<Node>),
               {id: dbName, label: dbName}
             ] as Array<Node>,
-            edges: flatten(properties.map((o) => o.values.map(oV => ({
+            edges: flatten(properties.filter(p => p.label !== '@id' && p.label !== '@type').map((o) => o.values.map(oV => ({
                 source: dbName,
-                target: this.sanitizeNodeId(oV),
+                target: this.sanitizeNodeId(oV.id),
                 label: o.label,
-                id: this.sanitizeNodeId(oV)
+                id: this.sanitizeNodeId(oV.id)
               }))
             )) as Array<Edge>,
             jsonLD: dbO
           });
         }
-        this.dbData = tempData;
         this.noPages = Math.ceil(this.dbData.length / this.PAGE_SIZE);
       })
       .catch((err) => {
