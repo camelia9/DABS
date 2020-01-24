@@ -18,6 +18,7 @@ interface MyChartOptions {
 export class DabsHomeComponent implements OnInit {
   @ViewChild('dbCanvas', {static: true}) el: ElementRef<HTMLCanvasElement>;
   @ViewChild('envCanvas', {static: true}) elEnv: ElementRef<HTMLCanvasElement>;
+  private readonly MAX_DBS = 4;
   private envChart: Chart;
   private dbChart: Chart;
   private chartColors = {
@@ -110,8 +111,13 @@ export class DabsHomeComponent implements OnInit {
     this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/metrics')
       .toPromise()
       .then((res: { stats1: Record<string, number>, stats2: Record<string, number> }) => {
-        this.dbData.labels = Object.keys(res.stats1);
-        this.dbData.datasets[0].data = Object.values(res.stats1);
+        const sortedData = Object.entries(res.stats1).sort(([aK, aV], [bK, bV]) => bV - aV);
+        const filteredData = [
+          ...sortedData.slice(0, this.MAX_DBS),
+          ['Other', sortedData.slice(this.MAX_DBS).reduce((accum, current) => accum + current[1], 0)]
+        ] as Array<[string, number]>;
+        this.dbData.labels = filteredData.map(([dK, dV]) => dK);
+        this.dbData.datasets[0].data = filteredData.map(([dK, dV]) => dV);
 
         this.envData.labels = Object.keys(res.stats2);
         this.envData.datasets[0].data = Object.values(res.stats2);
