@@ -385,8 +385,15 @@ export class DabsRecommendComponent implements OnInit {
   }
 
   // add preference
-  createPreference(name: string) {
-
+  createPreference(dbName: string) {
+    this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/preferences', {label: dbName, user_id: this.$cookies.get('user_id')})
+      .toPromise()
+      .then(() => {
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Error sending stats for db. Try again later.');
+      });
   }
 
   clickedNode($event: Node) {
@@ -425,6 +432,10 @@ export class DabsRecommendComponent implements OnInit {
         }
         this.update$.next(true);
         this.zoomToFit$.next(true);
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Retrieving expanding node data failed. Try again later.');
       });
   }
 }

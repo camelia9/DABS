@@ -30,8 +30,8 @@
                        [pageIndex]="selectedPage"
                        (page)="changePage($event)"></mat-paginator>
         <mat-accordion>
-          <mat-expansion-panel class="dbInfo" *ngFor="let dbO of dbData | pagination:selectedPage:PAGE_SIZE">
-            <mat-expansion-panel-header id="dbInfoHeader" (click)="createPreference(dbO.name)">
+          <mat-expansion-panel class="dbInfo" *ngFor="let dbO of dbData | pagination:selectedPage:PAGE_SIZE" (afterExpand)="createPreference(dbO.name)">
+            <mat-expansion-panel-header id="dbInfoHeader">
               <mat-panel-title style="color: #303f97; font-weight: bold">
                 {{dbO.name}}
               </mat-panel-title>
