@@ -1,0 +1,68 @@
+#mainCard {
+  margin: 50px 0;
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+$primary-color: #303f97;
+$accent-color-lighter: rgba(255, 132, 0, 0.6);
+$accent-color-text: orange;
+$accent-color: orange;
+
+.cardTitles {
+  padding: 15px;
+  background-color: $primary-color;
+  color: white;
+  font-weight: lighter;
+}
+
+$my-special-color: orange;
+$my-special-color-lighter: #ffc504;
+
+.loginIcons {
+  color: $my-special-color;
+  margin-right: 5px;
+}
+
+#warningText{
+  color: $primary-color;
+  font-weight: normal;
+}
+.text, h2 {
+  color: $my-special-color;
+}
+
+#startButton{
+  color: $primary-color;
+}
+#deleteButton{
+  color: $primary-color;
+}
+
+:host ::ng-deep {
+
+  .mat-form-field-underline, .mat-form-field-ripple {
+    background-color: $primary-color;
+  }
+
+  .mat-form-field-label {
+    color: $primary-color;
+  }
+
+  input {
+    color: $primary-color;
+    caret-color: $primary-color;
+  }
+
+  .mat-focused {
+    .mat-form-field-underline, .mat-form-field-ripple {
+      background-color: $primary-color;
+    }
+
+    .mat-form-field-label {
+      color: $primary-color;
+    }
+  }
+
+
+}

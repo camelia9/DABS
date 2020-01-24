@@ -1,0 +1,42 @@
+<div fxFlexFill class="mainBackground" fxLayout="column" fxLayoutAlign="center center">
+  <span fxFlex="20"></span>
+  <form name="signUpForm" (submit)="goSignUp()" fxLayout="column" fxLayoutGap="20px" #heroForm="ngForm">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <img src="../assets/dabs.png" alt="Icon"/>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <h2>Sign Up</h2>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="loginIcons">person</mat-icon>
+      <mat-form-field>
+        <input placeholder="Name" matInput required [(ngModel)]="signFormModel.name" type="text" name="text">
+      </mat-form-field>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="loginIcons">email</mat-icon>
+      <mat-form-field>
+        <input placeholder="Email" matInput required [(ngModel)]="signFormModel.email" type="email" name="email">
+      </mat-form-field>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="loginIcons">lock_open</mat-icon>
+      <mat-form-field>
+        <input placeholder="Password" matInput required [(ngModel)]="signFormModel.password"
+               type="password" name="password">
+      </mat-form-field>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="loginIcons">lock</mat-icon>
+      <mat-form-field>
+        <input placeholder="Confirm Password" matInput required [(ngModel)]="signFormModel.cfPassword"
+               type="password" name="cfPassword">
+      </mat-form-field>
+    </div>
+    <button id="startButton" mat-raised-button color="accent" type="submit" [disabled]="!heroForm.form.valid">
+      Sign Up
+      <mat-icon id="startIcon">create</mat-icon>
+    </button>
+  </form>
+  <span fxFlex="20"></span>
+</div>

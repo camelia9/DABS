@@ -1,0 +1,57 @@
+.example-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-repeat: repeat;
+  background-position: center;
+  background-image: url(../assets/xv.png), linear-gradient(90deg, rgb(48, 63, 151), rgb(188, 94, 0));
+}
+
+
+
+$primary-color: #303f97;
+$accent-color-lighter: rgba(255, 132, 0, 0.62);
+$accent-color-text: #FF9800;
+$accent-color: #FF9800;
+
+.menuItems{
+  color: $primary-color;
+}
+.menuItems:hover{
+  background-color: $accent-color-lighter;
+}
+.back{
+  background-repeat: repeat;
+  background-position: center;
+  background-image: url(../assets/xv.png), linear-gradient(90deg, rgb(48, 63, 151), rgb(188, 94, 0));
+}
+
+#copyrightFooter{
+  color: $primary-color;
+}
+
+.mainToolbar{
+  background-color: $primary-color;
+  color: white;
+}
+
+h2{
+  color: #303f97;
+}
+
+.example-radio-group {
+  display: block;
+  border: 1px solid #555;
+  margin: 20px;
+  padding: 10px;
+}
+
+.example-icon {
+  padding: 0 14px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}

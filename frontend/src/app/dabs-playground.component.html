@@ -1,0 +1,24 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+  <mat-card id="mainCard">
+    <mat-card-title class="cardTitles">Database Playground</mat-card-title>
+    <mat-card-content>
+      <div fxFlexFill fxLayout="row">
+        <mat-form-field class="choiceDropDown">
+          <mat-label style="color: #303f97;">Database</mat-label>
+          <mat-select [(value)]="dbType" (valueChange)="clearTerminal()">
+            <mat-option style="color: #303f97;" value='MongoDB'>MongoDB</mat-option>
+            <mat-option style="color: #303f97;" value='Redis'>Redis</mat-option>
+            <mat-option style="color: #303f97;" value='PostgreSQL'>PostgreSQL</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span fxFlex></span>
+        <div style="margin-right: 30px;">
+          <img fxFlex src="../assets/dabs.png">
+        </div>
+      </div>
+      <div style="margin: 30px">
+        <ng-terminal #term></ng-terminal>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

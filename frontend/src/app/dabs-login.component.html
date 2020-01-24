@@ -1,0 +1,51 @@
+<div fxFlexFill class="mainBackground" fxLayout="column" fxLayoutAlign="center center">
+  <span fxFlex="20"></span>
+  <form name="loginForm" (submit)="goHome()" fxLayout="column" fxLayoutGap="20px" #heroForm="ngForm">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <img src="../assets/dabs.png" alt="Icon"/>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <h2>Log In</h2>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="loginIcons">email</mat-icon>
+      <mat-form-field>
+        <input placeholder="Email" matInput required [(ngModel)]="authFormModel.email" type="email" name="email">
+      </mat-form-field>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="loginIcons">lock</mat-icon>
+      <mat-form-field>
+        <input placeholder="Password" matInput required [(ngModel)]="authFormModel.password"
+               type="password" name="password">
+      </mat-form-field>
+    </div>
+    <button id="startButton" mat-raised-button color="accent" type="submit" [disabled]="!heroForm.form.valid">
+      Sign In
+      <mat-icon id="startIcon">vpn_key</mat-icon>
+    </button>
+  </form>
+  <div fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="start center" style="margin-top: 20px;">
+    <p class="text">Don't have an account?</p>
+    <u><a class="text" (click)="goSignUp()">Create one now</a></u>
+  </div>
+  <span fxFlex="5"></span>
+  <!--  <button>-->
+  <!--    <a class="oauth-container btn darken-4 white black-text" href="/users/google-oauth/">-->
+  <!--      <div class="left">-->
+  <!--        <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in"-->
+  <!--             src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>-->
+  <!--      </div>-->
+  <!--      Login with Google-->
+  <!--    </a>-->
+  <!--  </button>-->
+  <!--  <button>-->
+  <!--    <a href="/users/google-oauth/">-->
+  <!--      <div>-->
+  <!--        <img width="205" alt="Twitter sign-in"-->
+  <!--             src="../../img/sign-in-with-twitter-gray-1-png-img-fullhd-medium.png.img.fullhd.medium.png"/>-->
+  <!--      </div>-->
+  <!--    </a>-->
+  <!--  </button>-->
+  <span fxFlex="20"></span>
+</div>

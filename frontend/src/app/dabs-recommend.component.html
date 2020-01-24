@@ -1,0 +1,124 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+  <mat-card id="mainCard">
+    <mat-card-title class="cardTitles">Preference Wizard</mat-card-title>
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="50px" id="choiceForm">
+        <mat-form-field class="choiceDropDown" *ngFor="let filter of filters">
+          <mat-label style="color: #303f97;">{{filter.label}}</mat-label>
+          <mat-select [(value)]="filter.variable">
+            <mat-option style="color: #303f97;" *ngFor="let option of filter.options"
+                        [value]='option'>{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlexFill fxLayout="row" fxLayoutAlign="center center">
+        <button mat-raised-button color="primary" fxFlex id="submitButton" (click)="performQuery()"
+                [disabled]="loadingQuery">
+          <span *ngIf="!loadingQuery">Submit</span>
+          <div fxLayout="row" fxLayoutAlign="center center" style="margin: 10px 0;" *ngIf="loadingQuery">
+            <mat-spinner diameter="30"></mat-spinner>
+          </div>
+        </button>
+      </div>
+      <ng-container *ngIf="queriedAtLeastOnce && !loadingQuery">
+        <h2 class="spacingInCard" id="resultsTitle">
+          Databases Results
+        </h2>
+        <mat-paginator color="accent"
+                       [length]="dbData.length"
+                       [pageSize]="PAGE_SIZE"
+                       [pageIndex]="selectedPage"
+                       (page)="changePage($event)"></mat-paginator>
+        <mat-accordion>
+          <mat-expansion-panel class="dbInfo" *ngFor="let dbO of dbData | pagination:selectedPage:PAGE_SIZE">
+            <mat-expansion-panel-header id="dbInfoHeader">
+              <mat-panel-title style="color: #303f97; font-weight: bold">
+                {{dbO.name}}
+              </mat-panel-title>
+              <ngx-json-ld [json]="dbO.jsonLD"></ngx-json-ld>
+            </mat-expansion-panel-header>
+            <div fxLayout="column" vocab="http://ec2-54-93-236-36.eu-central-1.compute.amazonaws.com:3030/v2"
+                 typeof="DatabaseManagementSystem">
+              <mat-list role="list">
+                <ng-container *ngFor="let prop of dbO.properties">
+                  <mat-list-item role="listitem">
+                    <mat-icon style="color: #303f97;">whatshot</mat-icon>
+                    <p style="color: #303f97;">{{prop.label}} : </p>
+                    <ng-container *ngIf="prop.values.length === 1">
+                      <p style="color: #ff8433;">{{prop.values[0].value}}</p>
+                    </ng-container>
+                    <mat-divider></mat-divider>
+                  </mat-list-item>
+                  <mat-list style="margin-left:30px" *ngIf="prop.values.length > 1">
+                    <div *ngFor="let propV of prop.values">
+                      <mat-list-item style="color: #ff8433">{{ propV.value }}</mat-list-item>
+                    </div>
+                  </mat-list>
+
+                </ng-container>
+              </mat-list>
+              <div fxLayout="row" fxLayoutAlign="end end" style="margin-top: 30px">
+                <button mat-raised-button color="accent" (click)="toggleTheGraph(dbO)">
+                  {{dbO !== showGraphForDB ? 'View' : 'Hide'}} Graph
+                </button>
+              </div>
+              <div style="height: 900px" *ngIf="dbO === showGraphForDB">
+                <ngx-graph
+                  [autoCenter]=true
+                  [enableZoom]=false
+                  layout="dagre"
+                  [animate]=true
+                  class="chart-container"
+                  [links]="dbO.edges"
+                  [nodes]="dbO.nodes"
+                  [zoomToFit$]="zoomToFit$"
+                >
+                  <ng-template #defsTemplate>
+                    <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4"
+                                orient="auto">
+                      <svg:path d="M0,-5L10,0L0,5" class="arrow-head"/>
+                    </svg:marker>
+                  </ng-template>
+
+                  <ng-template #clusterTemplate let-cluster>
+                    <svg:g class="node cluster">
+                      <svg:rect rx="5" ry="5" [attr.width]="cluster.dimension.width"
+                                [attr.height]="cluster.dimension.height" [attr.fill]="cluster.data.color"/>
+                      <svg:text alignment-baseline="central" [attr.x]="10"
+                                [attr.y]="cluster.dimension.height / 2">{{cluster.label}}</svg:text>
+                    </svg:g>
+                  </ng-template>
+
+                  <ng-template #nodeTemplate let-node>
+                    <svg:g class="node">
+                      <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height"
+                                [attr.fill]="node.data.myColor"/>
+                      <svg:text alignment-baseline="central" [attr.x]="10"
+                                [attr.y]="node.dimension.height / 2">{{node.label}}</svg:text>
+                    </svg:g>
+                  </ng-template>
+
+                  <ng-template #linkTemplate let-link>
+                    <svg:g class="edge">
+                      <svg:path class="line" stroke-width="2" marker-end="url(#arrow)">
+                      </svg:path>
+                      <svg:text class="edge-label" text-anchor="middle">
+                        <textPath class="text-path" [attr.href]="'#' + link.id"
+                                  [style.dominant-baseline]="link.dominantBaseline" startOffset="50%">
+                          {{link.label}}
+                        </textPath>
+                      </svg:text>
+                    </svg:g>
+                  </ng-template>
+                </ngx-graph>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-container>
+    </mat-card-content>
+
+
+  </mat-card>
+
+</div>

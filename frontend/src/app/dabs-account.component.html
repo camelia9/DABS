@@ -1,0 +1,89 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+  <ngx-json-ld [json]="userJSONLD"></ngx-json-ld>
+  <mat-card id="mainCard">
+    <mat-card-title class="cardTitles">Account Information</mat-card-title>
+    <mat-card-content style="margin: 20px 30px">
+      <mat-horizontal-stepper [linear]=false #stepper fxFlexFill style="background: transparent">
+        <mat-step [stepControl]="nameForm">
+          <form [formGroup]="nameForm">
+            <ng-template matStepLabel>Update your name</ng-template>
+            <mat-form-field style="margin-left: 15px">
+              <input matInput placeholder="Last name, First name" formControlName="nameCtrl">
+            </mat-form-field>
+            <p></p>
+            <div>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="emailForm">
+          <form [formGroup]="emailForm">
+            <ng-template matStepLabel>Update your email</ng-template>
+            <mat-form-field style="margin-left: 15px">
+              <input matInput placeholder="Email" formControlName="emailCtrl">
+            </mat-form-field>
+            <p></p>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="passForm">
+          <form [formGroup]="passForm">
+            <ng-template matStepLabel>Update your password</ng-template>
+            <mat-form-field style="margin-left: 15px">
+              <input matInput placeholder="Password" type="password" name="password" formControlName="passCtrl"
+                     >
+            </mat-form-field>
+            <p></p>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="passCfForm">
+          <form [formGroup]="passCfForm">
+            <ng-template matStepLabel>Confirm your password</ng-template>
+            <mat-form-field style="margin-left: 15px">
+              <input matInput placeholder="Password" type="password" name="password" formControlName="passCfCtrl" >
+            </mat-form-field>
+            <p></p>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Save</ng-template>
+          <div fxLayout="column" fxLayoutAlign="start start" style="margin-left: 15px">
+            <p>You are now done. Click the Save button to update your info.</p>
+            <p></p>
+            <button id="startButton" mat-flat-button color="accent" (click)="updateAccount()">
+              Save
+              <mat-icon id="startIcon">save</mat-icon>
+            </button>
+            <p></p>
+          </div>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+      <span fxFlex="20"></span>
+    </mat-card-content>
+    <mat-card-title class="cardTitles" style="margin-top: 50px">GDPR Account Delete</mat-card-title>
+    <mat-card-content>
+      <div style="margin: 30px">
+        <h3 id="warningText">Deleting an account is an irreversible action. You will no longer be able to access this application without creating a new account.</h3>
+      </div>
+      <button id="deleteButton" style="margin: 0 30px" mat-flat-button color="accent" (click)="deleteAccount()">
+        Delete account
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>

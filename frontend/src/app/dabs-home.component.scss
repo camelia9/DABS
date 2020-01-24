@@ -1,0 +1,75 @@
+#mainCard {
+  margin: 50px 0;
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+$primary-color: #303f97;
+$accent-color-lighter: rgba(255, 132, 0, 0.6);
+$accent-color-text: orange;
+$accent-color: orange;
+
+.cardTitles {
+  padding: 15px;
+  background-color: $primary-color;
+  color: white;
+  font-weight: lighter;
+}
+
+.statsCharts {
+
+  position: relative;
+  width: 45%;
+  height: 300px;
+  margin: 30px;
+}
+
+
+.newsfeed-card {
+  max-width: 350px;
+  min-height: 530px;
+  background-color: rgba(255, 255, 255);
+  margin-bottom: 30px;
+
+  img {
+    width: calc(100% - 32px);
+    margin: 0;
+  }
+
+  mat-card-header {
+    min-height: 110px;
+  }
+
+  .image-wrapper {
+    height: 300px;
+  }
+
+  .descriptionF{
+    height: 150px;
+  }
+}
+
+.feedDescription {
+  color: $primary-color;
+  margin-bottom: 30px !important;
+  margin-top: 20px !important;
+  text-align: justify;
+  font-weight: lighter;
+  line-height: 1.5;
+}
+
+#newsHeader {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: $primary-color;
+}
+
+.example-header-image {
+  background-image: url("../assets/db-weekly-avatar.png");
+  background-size: cover;
+  border-radius: 0;
+}
+
+#secondCard {
+  margin: 30px;
+}
