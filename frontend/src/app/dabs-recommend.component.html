@@ -43,9 +43,9 @@
                 <ng-container *ngFor="let prop of dbO.properties">
                   <mat-list-item role="listitem">
                     <mat-icon style="color: #303f97;">whatshot</mat-icon>
-                    <p style="color: #303f97;">{{prop.label}} : </p>
+                    <p style="color: #303f97;">{{prop.label}}: </p>
                     <ng-container *ngIf="prop.values.length === 1">
-                      <p style="color: #ff8433;">{{prop.values[0].value}}</p>
+                      <p style="color: #ff8433;margin-left: 5px;">{{prop.values[0].value}}</p>
                     </ng-container>
                     <mat-divider></mat-divider>
                   </mat-list-item>
@@ -65,7 +65,7 @@
               <div style="height: 900px" *ngIf="dbO === showGraphForDB">
                 <ngx-graph
                   [autoCenter]=true
-                  [enableZoom]=false
+                  [enableZoom]=true
                   layout="dagre"
                   [animate]=true
                   class="chart-container"

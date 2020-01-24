@@ -231,6 +231,12 @@ const nodesColorsMappings = {
   styleUrls: ['./dabs-recommend.component.scss']
 })
 export class DabsRecommendComponent implements OnInit {
+
+  constructor(private $http: HttpClient, private $cookies: CookieService, private snackBar: MatSnackBar) {
+
+
+  }
+
   public dbData: Array<UIDataElem>;
 
   public loadingQuery = false;
@@ -240,11 +246,6 @@ export class DabsRecommendComponent implements OnInit {
   public noPages: number;
   public selectedPage = 0;
 
-  constructor(private $http: HttpClient, private $cookies: CookieService, private snackBar: MatSnackBar) {
-
-
-  }
-
   zoomToFit$: Subject<boolean> = new Subject();
   update$: Subject<boolean> = new Subject();
 
@@ -252,6 +253,8 @@ export class DabsRecommendComponent implements OnInit {
 
   showGraphForDB: UIDataElem = null;
   durationInSeconds = 5;
+
+  private loadingExtraNodes = false;
 
 
   fitGraph() {
@@ -397,12 +400,16 @@ export class DabsRecommendComponent implements OnInit {
   }
 
   clickedNode($event: Node) {
+    if (this.loadingExtraNodes) {
+      return;
+    }
     if (!$event.data.property) {
       // root node
       return;
     }
     const dbO = this.showGraphForDB;
     const foundProperty = FILTERS_DATA.find(o => o.property === $event.data.property);
+    this.loadingExtraNodes = true;
     this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/sparql', {
       [foundProperty.property]: $event.id
     }).toPromise()
@@ -424,11 +431,19 @@ export class DabsRecommendComponent implements OnInit {
             });
             idx++;
           }
-          dbO.edges.push({
+          const newEdge = {
             source: $event.id,
             target: this.sanitizeNodeId(dbName),
             label: $event.data.property
-          });
+          };
+          if (dbO.edges.find(e =>
+            e.source === newEdge.source &&
+            e.target === newEdge.target &&
+            e.label === newEdge.label)
+          ) {
+            continue;
+          }
+          dbO.edges.push(newEdge);
         }
         this.update$.next(true);
         this.zoomToFit$.next(true);
@@ -436,6 +451,7 @@ export class DabsRecommendComponent implements OnInit {
       .catch((err) => {
         console.error(err);
         this.openSnackBar('Retrieving expanding node data failed. Try again later.');
-      });
+      })
+      .finally(() => this.loadingExtraNodes = false);
   }
 }
