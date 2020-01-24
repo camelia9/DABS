@@ -5,6 +5,11 @@ import {environment} from '../environments/environment';
 import {CookieService} from 'ngx-cookie-service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
+interface MyChartOptions {
+  datasets: { backgroundColor: (string)[]; borderColor: string; data: number[]; borderWidth: number }[];
+  labels: any[];
+}
+
 @Component({
   selector: 'dabs-home',
   templateUrl: './dabs-home.component.html',
@@ -15,11 +20,52 @@ export class DabsHomeComponent implements OnInit {
   @ViewChild('envCanvas', {static: true}) elEnv: ElementRef<HTMLCanvasElement>;
   private envChart: Chart;
   private dbChart: Chart;
-  private chartColors: any;
+  private chartColors = {
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)'
+  };
   public newsFeed = JSON.parse(localStorage.getItem('CACHED_DATA') || '[]');
   private headers: HttpHeaders;
   durationInSeconds = 5;
-  private dbData: { datasets: { backgroundColor: (string)[]; borderColor: string; data: number[]; borderWidth: number }[]; labels: any[] };
+  private dbData: MyChartOptions = {
+    labels: [],
+    datasets: [{
+      backgroundColor: [
+        this.chartColors.red,
+        this.chartColors.green,
+        this.chartColors.blue,
+        this.chartColors.purple,
+        this.chartColors.orange
+      ],
+      borderColor: this.chartColors.grey,
+      borderWidth: 2,
+      data: []
+    }],
+  };
+  private envData: MyChartOptions = {
+    labels: [],
+    datasets: [{
+      data: [],
+      backgroundColor: [
+        '#C13FAC',
+        '#F72C25',
+        '#ABD8AC',
+        '#FEC925',
+        this.chartColors.purple,
+        this.chartColors.orange,
+        this.chartColors.red,
+        this.chartColors.green,
+        this.chartColors.blue,
+      ],
+      borderWidth: 2,
+      borderColor: this.chartColors.grey
+    }],
+  };
 
 
   constructor(private $http: HttpClient, private $cookies: CookieService, private snackBar: MatSnackBar) {
@@ -27,70 +73,6 @@ export class DabsHomeComponent implements OnInit {
 
 
   renderCharts() {
-
-    // implement request to Metrics API
-
-    this.chartColors = {
-      red: 'rgb(255, 99, 132)',
-      orange: 'rgb(255, 159, 64)',
-      yellow: 'rgb(255, 205, 86)',
-      green: 'rgb(75, 192, 192)',
-      blue: 'rgb(54, 162, 235)',
-      purple: 'rgb(153, 102, 255)',
-      grey: 'rgb(201, 203, 207)'
-    };
-
-    this.dbData = {
-      labels: [],
-      datasets: [{
-        backgroundColor: [
-          this.chartColors.red,
-          this.chartColors.green,
-          this.chartColors.blue,
-          this.chartColors.purple,
-          this.chartColors.orange
-        ],
-        borderColor: this.chartColors.grey,
-        borderWidth: 2,
-        data: [
-          90, 70, 60, 50, 40, 30
-        ]
-      }]
-    };
-    // first chart
-    this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/metrics')
-      .toPromise()
-      .then((res: any) => {
-        console.log(res);
-
-        this.dbData.labels = Object.keys(res);
-        this.dbData.datasets[0].data = Object.values(res);
-        console.log(this.dbData);
-      })
-      .catch((err) => {
-        console.error(err);
-        this.openSnackBar('Retrieving chart data failed. Try again later.');
-      });
-
-
-    const envData = {
-      datasets: [{
-        data: [10, 20, 30],
-        backgroundColor: [
-          this.chartColors.purple,
-          this.chartColors.blue,
-          this.chartColors.green,
-        ],
-        borderWidth: 3,
-        borderColor: this.chartColors.grey
-      }],
-      labels: [
-        'Desktop',
-        'Web',
-        'Cloud'
-      ]
-    };
-
     this.dbChart = new Chart(this.el.nativeElement, {
       data: this.dbData,
       type: 'bar',
@@ -99,18 +81,48 @@ export class DabsHomeComponent implements OnInit {
           display: false
         },
         responsive: true,
-        maintainAspectRatio: false
-      }
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                suggestedMin: 0
+              }
+            }
+          ]
+        }
+      },
     });
 
     this.envChart = new Chart(this.elEnv.nativeElement, {
-      data: envData,
+      data: this.envData,
       type: 'pie',
       options: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        legend: {
+          position: 'right'
+        }
       }
     });
+
+    // first chart
+    this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/metrics')
+      .toPromise()
+      .then((res: { stats1: Record<string, number>, stats2: Record<string, number> }) => {
+        this.dbData.labels = Object.keys(res.stats1);
+        this.dbData.datasets[0].data = Object.values(res.stats1);
+
+        this.envData.labels = Object.keys(res.stats2);
+        this.envData.datasets[0].data = Object.values(res.stats2);
+
+        this.dbChart.update();
+        this.envChart.update();
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Retrieving chart data failed. Try again later.');
+      });
 
   }
 
