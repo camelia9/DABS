@@ -256,6 +256,17 @@ export class DabsRecommendComponent implements OnInit {
       });
   }
 
+  private sanitizeNodeId = v => {
+    if (v.startsWith('http://')) {
+      const splitted = v.split('/');
+      return this.sanitizeNodeId(splitted[splitted.length - 1]);
+    }
+    if (Number.isNaN(+v[0])) {
+      return sanitizeForBackend(v);
+    }
+    return this.sanitizeNodeId('X' + v);
+  }
+
   performQuery() {
 
     this.req = {};
