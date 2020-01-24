@@ -12,17 +12,24 @@
         </mat-form-field>
       </div>
       <div fxFlexFill fxLayout="row" fxLayoutAlign="center center">
-        <button mat-raised-button color="primary" fxFlex id="submitButton" (click)="performQuery()">Submit</button>
+        <button mat-raised-button color="primary" fxFlex id="submitButton" (click)="performQuery()"
+                [disabled]="loadingQuery">
+          <span *ngIf="!loadingQuery">Submit</span>
+          <div fxLayout="row" fxLayoutAlign="center center" style="margin: 10px 0;" *ngIf="loadingQuery">
+            <mat-spinner diameter="30"></mat-spinner>
+          </div>
+        </button>
       </div>
-      <h2 class="spacingInCard" *ngIf="queryResults" id="resultsTitle">Databases Results</h2>
-      <mat-accordion *ngIf="queryResults">
-        <mat-expansion-panel class="dbInfo" (opened)="panelOpenState = true" (closed)="panelOpenState = false"
-                             *ngFor="let dbO of dbData">
+      <h2 class="spacingInCard" *ngIf="queriedAtLeastOnce && !loadingQuery" id="resultsTitle">
+        Databases Results ({{dbData.length}})
+      </h2>
+      <mat-accordion *ngIf="queriedAtLeastOnce && !loadingQuery">
+        <mat-expansion-panel class="dbInfo" *ngFor="let dbO of dbData">
           <mat-expansion-panel-header id="dbInfoHeader">
             <mat-panel-title style="color: #303f97; font-weight: bold">
               {{dbO.name}}
             </mat-panel-title>
-                        <ngx-json-ld [json]="dbO.jsonLD"></ngx-json-ld>
+            <ngx-json-ld [json]="dbO.jsonLD"></ngx-json-ld>
           </mat-expansion-panel-header>
           <div fxLayout="column" vocab="http://ec2-54-93-236-36.eu-central-1.compute.amazonaws.com:3030/v2"
                typeof="DatabaseManagementSystem">
@@ -44,13 +51,12 @@
 
               </ng-container>
             </mat-list>
-            <div fxLayout="row" fxLayoutAlign="end end" style="margin-top: 30px" *ngIf="!showGraph">
-              <button mat-raised-button color="accent" (click)="toggleTheGraph()">View Graph</button>
+            <div fxLayout="row" fxLayoutAlign="end end" style="margin-top: 30px">
+              <button mat-raised-button color="accent" (click)="toggleTheGraph(dbO)">
+                {{dbO !== showGraphForDB ? 'View' : 'Hide'}} Graph
+              </button>
             </div>
-            <div fxLayout="row" fxLayoutAlign="end end" style="margin-top: 30px" *ngIf="showGraph">
-              <button mat-raised-button color="accent" (click)="toggleTheGraph()">Hide Graph</button>
-            </div>
-            <div style="height: 900px" *ngIf="showGraph">
+            <div style="height: 900px" *ngIf="dbO === showGraphForDB">
               <ngx-graph
                 [autoCenter]=true
                 [enableZoom]=false

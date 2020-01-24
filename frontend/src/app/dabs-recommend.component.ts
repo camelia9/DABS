@@ -203,7 +203,6 @@ type QueryResultType = Record<string, QueryResultElem>;
   styleUrls: ['./dabs-recommend.component.scss']
 })
 export class DabsRecommendComponent implements OnInit {
-  private req: {};
   public dbData: Array<{
     name: string;
     properties: Array<{
@@ -215,6 +214,9 @@ export class DabsRecommendComponent implements OnInit {
     jsonLD: QueryResultElem;
   }>;
 
+  public loadingQuery = false;
+  public queriedAtLeastOnce = false;
+
   constructor(private $http: HttpClient, private $cookies: CookieService, private snackBar: MatSnackBar) {
 
 
@@ -224,12 +226,7 @@ export class DabsRecommendComponent implements OnInit {
 
   filters = FILTERS_DATA;
 
-  queryResults = false;
-
-  graphNodes: Array<Node>;
-  graphLinks: Array<Edge>;
-  panelOpenState: boolean;
-  showGraph = false;
+  showGraphForDB = false;
   durationInSeconds = 5;
 
 
@@ -237,14 +234,16 @@ export class DabsRecommendComponent implements OnInit {
     this.zoomToFit$.next(true);
   }
 
-  toggleTheGraph() {
-    this.showGraph = !this.showGraph;
+  toggleTheGraph(dbo) {
+    if (dbo === this.showGraphForDB) {
+      this.showGraphForDB = null;
+      return;
+    }
+    this.showGraphForDB = dbo;
     setTimeout(() => this.fitGraph(), 100);
   }
 
   ngOnInit() {
-    console.log(this.graphNodes);
-    console.log(this.graphLinks);
   }
 
   openSnackBar(message: string) {
@@ -269,23 +268,23 @@ export class DabsRecommendComponent implements OnInit {
 
   performQuery() {
 
-    this.req = {};
+    const req = {};
 
     FILTERS_DATA.forEach((filter) => {
       if (filter.variable !== 'None') {
-        this.req[filter.property] = sanitizeForBackend(filter.variable);
+        req[filter.property] = sanitizeForBackend(filter.variable);
       }
     });
 
-    if (!Object.keys(this.req).length) {
+    if (!Object.keys(req).length) {
       this.openSnackBar('Please fill in a filter');
       return;
     }
-
-    this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/sparql', this.req)
+    this.loadingQuery = true;
+    this.queriedAtLeastOnce = true;
+    this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/sparql', req)
       .toPromise()
       .then((res: QueryResultType) => {
-        // const res = RESULTS_DATA;
         const tempData = [];
         for (const dbName in res) {
           const dbO = res[dbName];
@@ -327,12 +326,12 @@ export class DabsRecommendComponent implements OnInit {
 
 
         this.dbData = tempData;
-        this.queryResults = true;
       })
       .catch((err) => {
         console.error(err);
         this.openSnackBar('Retrieving user data failed. Try again later.');
-      });
+      })
+      .finally(() => this.loadingQuery = false);
   }
 
 

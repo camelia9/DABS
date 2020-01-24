@@ -7,7 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatButtonModule} from '@angular/material/button';
-import { NgxJsonLdModule } from '@ngx-lite/json-ld';
+import {NgxJsonLdModule} from '@ngx-lite/json-ld';
 import {
   MatExpansionModule,
   MatFormFieldModule,
@@ -16,7 +16,7 @@ import {
   MatRadioModule, MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule, MatStepperModule,
-  MatToolbarModule
+  MatToolbarModule, MatProgressSpinnerModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -32,7 +32,7 @@ import {UrlToStatePipe} from './pipes/url-to-state.pipe';
 import {DabsAccountComponent} from './dabs-account.component';
 import {NgTerminalModule} from 'ng-terminal';
 import {AddTokenInterceptor} from './http.interceptor';
-import { DabsJsonldComponent } from './dabs-jsonld.component';
+import {DabsJsonldComponent} from './dabs-jsonld.component';
 
 
 @NgModule({
@@ -72,7 +72,8 @@ import { DabsJsonldComponent } from './dabs-jsonld.component';
     NgxGraphModule,
     NgTerminalModule,
     MatStepperModule,
-    NgxJsonLdModule
+    NgxJsonLdModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     CookieService,
