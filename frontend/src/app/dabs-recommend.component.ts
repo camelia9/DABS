@@ -212,6 +212,18 @@ interface UIDataElem {
   jsonLD: QueryResultElem;
 }
 
+const nodesColorsMappings = {
+  'Supports indexing': '#C13FAC',
+  'Has Concurrency Control Mechanism': '#22C1C1',
+  'Has Data Model': '#FCF6B1',
+  'Has Software License': '#F72C25',
+  'Has Storage Model': '#006CAF',
+  'Supports Operating System': '#54B8F2',
+  'Supports Programming Language': '#ABD8AC',
+  'Supports Query Language': '#8282DD',
+  default: '#FEC925'
+};
+
 @Component({
   selector: 'dabs-recommend',
   templateUrl: './dabs-recommend.component.html',
@@ -320,22 +332,32 @@ export class DabsRecommendComponent implements OnInit {
               }))
             });
           }
-          this.dbData.push({
-            name: dbName,
-            properties,
-            nodes: [
-              ...(flatten(properties.filter(p => p.label !== '@id' && p.label !== '@type').map(
-                (o) => o.values.map(oV => ({label: oV.value, id: this.sanitizeNodeId(oV.id)}))
-              )) as Array<Node>),
-              {id: dbName, label: dbName}
-            ] as Array<Node>,
-            edges: flatten(properties.filter(p => p.label !== '@id' && p.label !== '@type').map((o) => o.values.map(oV => ({
+
+          const nodes: Array<Node> = [
+            ...(flatten(properties.filter(p => p.label !== '@id' && p.label !== '@type').map(
+              (o) => {
+                return o.values.map(oV => {
+                  return {label: oV.value, id: this.sanitizeNodeId(oV.id), data: {myColor: nodesColorsMappings[o.label]}};
+                });
+              }
+            )) as Array<Node>),
+            {id: dbName, label: dbName, data: {myColor: nodesColorsMappings.default}}
+          ];
+
+          const edges: Array<Edge> = flatten(properties.filter(p => p.label !== '@id' && p.label !== '@type')
+            .map((o) => o.values.map(oV => ({
                 source: dbName,
                 target: this.sanitizeNodeId(oV.id),
                 label: o.label,
                 id: this.sanitizeNodeId(oV.id)
               }))
-            )) as Array<Edge>,
+            ));
+
+          this.dbData.push({
+            name: dbName,
+            properties,
+            nodes,
+            edges,
             jsonLD: dbO
           });
         }
