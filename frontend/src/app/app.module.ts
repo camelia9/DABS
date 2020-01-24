@@ -8,16 +8,19 @@ import {MatCardModule} from '@angular/material/card';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatButtonModule} from '@angular/material/button';
 import {NgxJsonLdModule} from '@ngx-lite/json-ld';
-import {
-  MatExpansionModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule, MatListModule, MatOptionModule,
-  MatRadioModule, MatSelectModule,
-  MatSidenavModule,
-  MatSnackBarModule, MatStepperModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatPaginatorModule
-} from '@angular/material';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatPaginatorModule} from '@angular/material/paginator';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {NgxGraphModule} from '@swimlane/ngx-graph';
@@ -33,7 +36,7 @@ import {DabsAccountComponent} from './dabs-account.component';
 import {NgTerminalModule} from 'ng-terminal';
 import {AddTokenInterceptor} from './http.interceptor';
 import {DabsJsonldComponent} from './dabs-jsonld.component';
-import { PaginationPipe } from './pipes/pagination.pipe';
+import {PaginationPipe} from './pipes/pagination.pipe';
 
 
 @NgModule({
@@ -68,7 +71,6 @@ import { PaginationPipe } from './pipes/pagination.pipe';
     ReactiveFormsModule,
     MatToolbarModule,
     MatListModule,
-    MatOptionModule,
     MatSelectModule,
     MatExpansionModule,
     NgxGraphModule,

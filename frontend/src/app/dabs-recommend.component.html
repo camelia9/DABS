@@ -30,7 +30,7 @@
                        [pageIndex]="selectedPage"
                        (page)="changePage($event)"></mat-paginator>
         <mat-accordion>
-          <mat-expansion-panel class="dbInfo" *ngFor="let dbO of dbData | pagination:selectedPage:PAGE_SIZE">
+          <mat-expansion-panel class="dbInfo" *ngFor="let dbO of dbData | pagination:selectedPage:PAGE_SIZE" (afterExpand)="createPreference(dbO.name)">
             <mat-expansion-panel-header id="dbInfoHeader">
               <mat-panel-title style="color: #303f97; font-weight: bold">
                 {{dbO.name}}
@@ -43,9 +43,9 @@
                 <ng-container *ngFor="let prop of dbO.properties">
                   <mat-list-item role="listitem">
                     <mat-icon style="color: #303f97;">whatshot</mat-icon>
-                    <p style="color: #303f97;">{{prop.label}} : </p>
+                    <p style="color: #303f97;">{{prop.label}}: </p>
                     <ng-container *ngIf="prop.values.length === 1">
-                      <p style="color: #ff8433;">{{prop.values[0].value}}</p>
+                      <p style="color: #ff8433;margin-left: 5px;">{{prop.values[0].value}}</p>
                     </ng-container>
                     <mat-divider></mat-divider>
                   </mat-list-item>
@@ -65,13 +65,14 @@
               <div style="height: 900px" *ngIf="dbO === showGraphForDB">
                 <ngx-graph
                   [autoCenter]=true
-                  [enableZoom]=false
+                  [enableZoom]=true
                   layout="dagre"
                   [animate]=true
                   class="chart-container"
                   [links]="dbO.edges"
                   [nodes]="dbO.nodes"
                   [zoomToFit$]="zoomToFit$"
+                  [update$]="update$"
                 >
                   <ng-template #defsTemplate>
                     <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4"
@@ -90,7 +91,7 @@
                   </ng-template>
 
                   <ng-template #nodeTemplate let-node>
-                    <svg:g class="node">
+                    <svg:g class="node" (click)="clickedNode(node)">
                       <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height"
                                 [attr.fill]="node.data.myColor"/>
                       <svg:text alignment-baseline="central" [attr.x]="10"
