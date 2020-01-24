@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>DABS - Database Smart Web Tool</title>
+  <link rel="stylesheet" href="public/css/scholarly.css">
+  <link rel="stylesheet" href="public/js/prismjs/themes/prism-coy.css">
+  <script src="public/js/prismjs/prism.js" defer></script>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body prefix="schema: http://schema.org/ xsd: http://www.w3.org/2001/XMLSchema# sa: https://ns.science.ai/">
+<header>
+  <p class="title">Database Smart Web Tool</p>
+  <p class="subtitle">DABS</p>
+</header>
+<article id="what" typeof="schema:ScholarlyArticle" resource="#">
+  <h1>Database Smart Web Tool User Guide</h1>
+  <section>
+    <ol>
+      <li property="schema:contributor" typeof="sa:ContributorRole">
+        <a property="schema:contributor" href="https://github.com/gcalancea" typeof="schema:Person">
+          <span property="schema:givenName">Cristina - Georgiana</span>
+          <span property="schema:familyName">Calancea</span>
+        </a>
+      </li>
+      <li property="schema:contributor" typeof="sa:ContributorRole">
+        <a property="schema:contributor" href="https://github.com/tavy14t" typeof="schema:Person">
+          <span property="schema:givenName">Ionut - Octavian</span>
+          <span property="schema:familyName">Ilie</span>
+        </a>
+      </li>
+      <li property="schema:contributor" typeof="sa:ContributorRole">
+        <a property="schema:contributor" href="https://github.com/camelia9" typeof="schema:Person">
+          <strong>
+            <span property="schema:givenName">Camelia - Maria</span>
+            <span property="schema:familyName">Milut</span>
+          </strong>
+        </a>
+      </li>
+    </ol>
+    <ol>
+      <li id="scienceai">
+        <a href="https://www.info.uaic.ro/bin/Main/" typeof="schema:Corporation">
+          <span property="schema:name">Faculty of Computer Science</span>
+        </a>
+      </li>
+    </ol>
+  </section>
+
+  <section typeof="sa:Abstract" id="introduction">
+    <h2>Introduction</h2>
+    <p>
+      This document represents a user guide on how to take full advantage of the Dabs Project features and capabilities.
+      If you are a developer, you may want to check the technical guide we have here: <a
+      href="https://camelia9.github.io/dabs">https://camelia9.github.io/dabs</a>.
+      If you simply want to understand the way our web application can be used, proceed to the following sections, which
+      have detailed presentations
+      for each page the user may end up interacting with. Make sure you have a running browser installed on your
+      computer
+      (Firefox, Safari, Chrome etc.) and
+      access the following link: <a href="http://ec2-54-93-236-36.eu-central-1.compute.amazonaws.com:4200/">http://ec2-54-93-236-36.eu-central-1.compute.amazonaws.com:4200/</a>
+    </p>
+  </section>
+
+  <section typeof="sa:Results" id="login">
+    <h2>Login View</h2>
+    <p>Once you accessed the given link, you should end up on the page presented in the following picture.</p>
+    <figure typeof="sa:Image">
+      <img src="public/resources/login-ui.png" width="880" height="655">
+      <figcaption>
+        <center>Login Page</center>
+      </figcaption>
+    </figure>
+    <p>
+      The Login page contains two simple inputs, one for your email and one for your password. Once you complete them,
+      you can press the Sign In button, which will take you towards the Home page.
+      In case you do not already have an account, on the page is also a hyperlink towards the sign up page, which can be
+      seen under the "Don't have an account?" text.
+      Clicking on "Create one now" will take you to the Sign Up page.
+    </p>
+  </section>
+  <section id="sign-up">
+    <h2>Sign Up View</h2>
+    <p>The Sign up page has four simple inputs. The first input is the name, the second one is your email (which will be
+      used for authentication),
+      while the third and the fourth one are password fields. If the password fields do not match, you will not be
+      allowed
+      to create the account.
+      Once you completed the fields, you can press the Sign Up button. If the process is successful, you should be
+      redirected back towards the login page.</p>
+    <figure typeof="sa:Image">
+      <img src="public/resources/create-ui.png" width="880" height="655">
+      <figcaption>
+        <center>Sign Up Page</center>
+      </figcaption>
+    </figure>
+  </section>
+  <section id="home">
+    <h2>Home Page</h2>
+    <figure typeof="sa:Image">
+      <img src="public/resources/home-ui.png" width="880" height="655">
+      <figcaption>
+        <center>Home Page</center>
+      </figcaption>
+    </figure>
+    <p>After reaching the home page, you will see two sections, one that presents some statistics about database trends
+      and usages, while the second section represents a newsfeed that brings our users the latest news in the database
+      development and innovation world. The first graphic's data represents the most trending databases based on user
+      searches. The second graphic presents the most popular programming languages in respect to the database searches
+      performed by our users. These charts should highlight the most searched values in order to help the user
+      gain insight over what is trending right now. The newsfeed contains several cards with news, a short description
+      and an open button in case the user wishes to read the full article from his source.
+      From this page you can either access your account information from the right upper corner of the interface or log
+      out by clicking the button next to the account pictogram. You can also access the main menu of the app by clicking
+      in the left upper corner on the three-lined pictogram. From the main menu you can navigate towards the
+      Recommandation Tool or towards the Playground feature by clicking on the items in menu.</p>
+
+    <figure typeof="sa:Image">
+      <img src="public/resources/metrics-ui.png" width="880" height="655">
+      <figcaption>
+        <center>Home Metrics</center>
+      </figcaption>
+    </figure>
+    <figure typeof="sa:Image">
+      <img src="public/resources/home-newsfeed.png" width="880" height="655">
+      <figcaption>
+        <center>Home Newsfeed</center>
+      </figcaption>
+    </figure>
+    </figure>
+    <figure typeof="sa:Image">
+      <img src="public/resources/home-menu.png" width="880" height="655">
+      <figcaption>
+        <center>Home Menu</center>
+      </figcaption>
+    </figure>
+
+  </section>
+
+  <section id="recommendation">
+    <h2>Recommendation Page</h2>
+    <p>In this page we can see the Preference Wizard, your especially designed tool that allows the easy filtering of
+      database technologies. You are first greeted with a form. There are multiple filters that
+      can be selected in order to perform a query. If no filter is provided (a value other than None), an error message
+      will be displayed. Once you have chosen values for one or more inputs, you can click the submit button. After
+      that, under the form we will display the results of the queries as a paginated ordered list. You can click on more
+      items in the list to see detailed information about a item. Once expanding a database from the list, there is also
+      a button called "View Graph" that allows the visualization of the database, its properties and other related
+      databases, when clicking on each property.</p>
+    <figure typeof="sa:Image">
+      <img src="public/resources/recommandation-ui.png" width="880" height="655">
+      <figcaption>
+        <center>Recommendation Page</center>
+      </figcaption>
+    </figure>
+
+    <figure typeof="sa:Image">
+      <img src="public/resources/query-result-ui.png" width="880" height="655">
+      <figcaption>
+        <center>Query Results on Recommendation Page</center>
+      </figcaption>
+    </figure>
+    <figure typeof="sa:Image">
+      <img src="public/resources/graph-ui.png" width="880" height="655">
+      <figcaption>
+        <center>Graph for Query Results</center>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="playground">
+    <h2>Playground Page</h2>
+    <p>This page is designed to allow the user to try some database technologies live, directly in the browser, without
+    needing any other technology.
+    Once you reach this page (from the menu), you have a dropdown in the left corner, from where you can select the
+    type of database you want to play with. The shell will be refreshed each time you change the database type you want
+    to play with. After that, you can start by writing help in the shell, in order to familiarize yourself with the
+      allowed commands for that database type.</p>
+    <figure typeof="sa:Image">
+      <img src="public/resources/playground-ui.png" width="880" height="655">
+      <figcaption>
+        <center>Playground Page</center>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="account">
+    <h2>Account Page</h2>
+    <p>The purpose of this page is to allow users to easily manage their account data.
+    In this page, there are two sections. One for updating and one for deleting data. The update section allows you to
+    update your email, your password or your name. At least one of the fields should be filled in order for the update
+    to work. In order to get to the next field, you can click the Next button. In order to go back to a formerly
+    completed field, you can click the Back button. Pressing the Reset button will result in the deletion of all
+    completed fields.
+    For the delete account section, pressing the delete button will result in your account and all the associated data
+      to be erased from our system. Following, you will be redirected to the login page.</p>
+    <figure typeof="sa:Image">
+      <img src="public/resources/account-ui.png" width="880" height="655">
+      <figcaption>
+        <center>Account Page</center>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="conclusion">
+    <h2>Conclusions</h2>
+    <p>
+      This solution can be a valuable tool for any developer who is in search for trending technologies that
+      are the most suited for his end goal.
+    </p>
+    <p>
+      As for the future work, we propose enriching the available data sources for querying technologies, allowing access
+      for a few more technologies in the playground and integrating social media handles to the point
+      where users can share between eachother interesting choices of databases and rate the quality of our
+      recommendations in order to improve with each and every query.
+    </p>
+  </section>
+
+</article>
+<footer>
+  <p>
+    <a href="https://camelia9.github.io/dabs">Technical Documentation Home</a>
+    <a href="https://camelia9.github.io/dabs-guide">User Guide Documentation Home</a>
+    <a href="https://twitter.com/sciencedotai">@sciencedotai</a>
+    •
+    <a href="https://github.com/scienceai/scholarly.vernacular.io">Contribute</a>
+    •
+    Brought to you by the
+    <a href="http://science.ai/"><img src="sciencedotai.svg" alt="science.ai logo" height="20px"></a>
+    League of JStice
+  </p>
+</footer>
+</body>
+</html>
