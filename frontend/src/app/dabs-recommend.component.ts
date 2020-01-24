@@ -203,9 +203,10 @@ interface UIDataElem {
   properties: Array<{
     label: string;
     values: Array<{
-      id: string;
+      valueId: string;
       value: string;
     }>;
+    propertyId: string;
   }>;
   nodes: Array<Node>;
   edges: Array<Edge>;
@@ -245,10 +246,11 @@ export class DabsRecommendComponent implements OnInit {
   }
 
   zoomToFit$: Subject<boolean> = new Subject();
+  update$: Subject<boolean> = new Subject();
 
   filters = FILTERS_DATA;
 
-  showGraphForDB = false;
+  showGraphForDB: UIDataElem = null;
   durationInSeconds = 5;
 
 
@@ -318,8 +320,9 @@ export class DabsRecommendComponent implements OnInit {
                 label,
                 values: [{
                   value: labelValue,
-                  id: label
-                }]
+                  valueId: label
+                }],
+                propertyId: ''
               });
               continue;
             }
@@ -328,8 +331,9 @@ export class DabsRecommendComponent implements OnInit {
               label,
               values: labelValue.values.map(lVV => ({
                 value: lVV.value,
-                id: lVV['@id']
-              }))
+                valueId: lVV['@id']
+              })),
+              propertyId: labelValue['@id'].split('/')[labelValue['@id'].split('/').length - 1]
             });
           }
 
@@ -337,7 +341,11 @@ export class DabsRecommendComponent implements OnInit {
             ...(flatten(properties.filter(p => p.label !== '@id' && p.label !== '@type').map(
               (o) => {
                 return o.values.map(oV => {
-                  return {label: oV.value, id: this.sanitizeNodeId(oV.id), data: {myColor: nodesColorsMappings[o.label]}};
+                  return {
+                    label: oV.value,
+                    id: this.sanitizeNodeId(oV.valueId),
+                    data: {myColor: nodesColorsMappings[o.label], property: o.propertyId}
+                  };
                 });
               }
             )) as Array<Node>),
@@ -347,9 +355,9 @@ export class DabsRecommendComponent implements OnInit {
           const edges: Array<Edge> = flatten(properties.filter(p => p.label !== '@id' && p.label !== '@type')
             .map((o) => o.values.map(oV => ({
                 source: dbName,
-                target: this.sanitizeNodeId(oV.id),
+                target: this.sanitizeNodeId(oV.valueId),
                 label: o.label,
-                id: this.sanitizeNodeId(oV.id)
+                id: this.sanitizeNodeId(oV.valueId)
               }))
             ));
 
@@ -374,5 +382,60 @@ export class DabsRecommendComponent implements OnInit {
   changePage($event: PageEvent) {
     this.selectedPage = $event.pageIndex;
     this.showGraphForDB = null;
+  }
+
+  // add preference
+  createPreference(dbName: string) {
+    this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/preferences', {label: dbName, user_id: this.$cookies.get('user_id')})
+      .toPromise()
+      .then(() => {
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Error sending stats for db. Try again later.');
+      });
+  }
+
+  clickedNode($event: Node) {
+    if (!$event.data.property) {
+      // root node
+      return;
+    }
+    const dbO = this.showGraphForDB;
+    const foundProperty = FILTERS_DATA.find(o => o.property === $event.data.property);
+    this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/sparql', {
+      [foundProperty.property]: $event.id
+    }).toPromise()
+      .then((res: QueryResultType) => {
+        const MAX_EXTRA_NODES = 3;
+        let idx = 0;
+        for (const dbName in res) {
+          if (dbName === dbO.name) {
+            continue;
+          }
+          if (!dbO.nodes.find(o => o.label === dbName)) {
+            if (idx >= MAX_EXTRA_NODES) {
+              break;
+            }
+            dbO.nodes.push({
+              id: this.sanitizeNodeId(dbName),
+              label: dbName,
+              data: {myColor: nodesColorsMappings.default}
+            });
+            idx++;
+          }
+          dbO.edges.push({
+            source: $event.id,
+            target: this.sanitizeNodeId(dbName),
+            label: $event.data.property
+          });
+        }
+        this.update$.next(true);
+        this.zoomToFit$.next(true);
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Retrieving expanding node data failed. Try again later.');
+      });
   }
 }

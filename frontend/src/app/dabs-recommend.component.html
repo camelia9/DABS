@@ -30,7 +30,7 @@
                        [pageIndex]="selectedPage"
                        (page)="changePage($event)"></mat-paginator>
         <mat-accordion>
-          <mat-expansion-panel class="dbInfo" *ngFor="let dbO of dbData | pagination:selectedPage:PAGE_SIZE">
+          <mat-expansion-panel class="dbInfo" *ngFor="let dbO of dbData | pagination:selectedPage:PAGE_SIZE" (afterExpand)="createPreference(dbO.name)">
             <mat-expansion-panel-header id="dbInfoHeader">
               <mat-panel-title style="color: #303f97; font-weight: bold">
                 {{dbO.name}}
@@ -72,6 +72,7 @@
                   [links]="dbO.edges"
                   [nodes]="dbO.nodes"
                   [zoomToFit$]="zoomToFit$"
+                  [update$]="update$"
                 >
                   <ng-template #defsTemplate>
                     <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4"
@@ -90,7 +91,7 @@
                   </ng-template>
 
                   <ng-template #nodeTemplate let-node>
-                    <svg:g class="node">
+                    <svg:g class="node" (click)="clickedNode(node)">
                       <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height"
                                 [attr.fill]="node.data.myColor"/>
                       <svg:text alignment-baseline="central" [attr.x]="10"
