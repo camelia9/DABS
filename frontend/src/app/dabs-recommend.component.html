@@ -31,7 +31,7 @@
                        (page)="changePage($event)"></mat-paginator>
         <mat-accordion>
           <mat-expansion-panel class="dbInfo" *ngFor="let dbO of dbData | pagination:selectedPage:PAGE_SIZE">
-            <mat-expansion-panel-header id="dbInfoHeader">
+            <mat-expansion-panel-header id="dbInfoHeader" (click)="createPreference(dbO.name)">
               <mat-panel-title style="color: #303f97; font-weight: bold">
                 {{dbO.name}}
               </mat-panel-title>
@@ -90,7 +90,7 @@
                   </ng-template>
 
                   <ng-template #nodeTemplate let-node>
-                    <svg:g class="node">
+                    <svg:g class="node" (click)="clickedNode(node)">
                       <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height"
                                 [attr.fill]="node.data.myColor"/>
                       <svg:text alignment-baseline="central" [attr.x]="10"

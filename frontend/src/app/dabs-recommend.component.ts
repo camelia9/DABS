@@ -337,7 +337,11 @@ export class DabsRecommendComponent implements OnInit {
             ...(flatten(properties.filter(p => p.label !== '@id' && p.label !== '@type').map(
               (o) => {
                 return o.values.map(oV => {
-                  return {label: oV.value, id: this.sanitizeNodeId(oV.id), data: {myColor: nodesColorsMappings[o.label]}};
+                  return {
+                    label: oV.value,
+                    id: this.sanitizeNodeId(oV.id),
+                    data: {myColor: nodesColorsMappings[o.label], property: o.label}
+                  };
                 });
               }
             )) as Array<Node>),
@@ -374,5 +378,22 @@ export class DabsRecommendComponent implements OnInit {
   changePage($event: PageEvent) {
     this.selectedPage = $event.pageIndex;
     this.showGraphForDB = null;
+  }
+
+  // add preference
+  createPreference(name: string) {
+
+  }
+
+  clickedNode($event: Node) {
+    if (!$event.data.property) {
+      // root node
+      return;
+    }
+    const foundProperty = FILTERS_DATA.find(o => o.label === foundProperty.data.property);
+    this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/sparql', {
+      [foundProperty.property]: $event.id
+    }).toPromise()
+      .then(res => console.log(res));
   }
 }
