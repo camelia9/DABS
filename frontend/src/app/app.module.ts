@@ -16,7 +16,7 @@ import {
   MatRadioModule, MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule, MatStepperModule,
-  MatToolbarModule, MatProgressSpinnerModule
+  MatToolbarModule, MatProgressSpinnerModule, MatPaginatorModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -33,6 +33,7 @@ import {DabsAccountComponent} from './dabs-account.component';
 import {NgTerminalModule} from 'ng-terminal';
 import {AddTokenInterceptor} from './http.interceptor';
 import {DabsJsonldComponent} from './dabs-jsonld.component';
+import { PaginationPipe } from './pipes/pagination.pipe';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import {DabsJsonldComponent} from './dabs-jsonld.component';
     DabsMainComponent,
     UrlToStatePipe,
     DabsAccountComponent,
-    DabsJsonldComponent
+    DabsJsonldComponent,
+    PaginationPipe
   ],
   imports: [
     BrowserModule,
@@ -73,7 +75,8 @@ import {DabsJsonldComponent} from './dabs-jsonld.component';
     NgTerminalModule,
     MatStepperModule,
     NgxJsonLdModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatPaginatorModule
   ],
   providers: [
     CookieService,

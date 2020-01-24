@@ -6,6 +6,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {environment} from '../environments/environment';
 import {flatten} from '@angular/compiler';
+import {PageEvent} from '@angular/material';
 
 const sanitizeForBackend = label => label.replace(/[ +\/()#*²]/g, '_');
 
@@ -217,6 +218,10 @@ export class DabsRecommendComponent implements OnInit {
   public loadingQuery = false;
   public queriedAtLeastOnce = false;
 
+  public readonly PAGE_SIZE = 25;
+  public noPages: number;
+  public selectedPage = 0;
+
   constructor(private $http: HttpClient, private $cookies: CookieService, private snackBar: MatSnackBar) {
 
 
@@ -323,9 +328,8 @@ export class DabsRecommendComponent implements OnInit {
             jsonLD: dbO
           });
         }
-
-
         this.dbData = tempData;
+        this.noPages = Math.ceil(this.dbData.length / this.PAGE_SIZE);
       })
       .catch((err) => {
         console.error(err);
@@ -335,4 +339,8 @@ export class DabsRecommendComponent implements OnInit {
   }
 
 
+  changePage($event: PageEvent) {
+    this.selectedPage = $event.pageIndex;
+    this.showGraphForDB = null;
+  }
 }
