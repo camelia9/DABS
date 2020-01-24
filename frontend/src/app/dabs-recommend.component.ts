@@ -282,61 +282,57 @@ export class DabsRecommendComponent implements OnInit {
       return;
     }
 
-    // this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/sparql',
-    //   {
-    //     params: this.req
-    //   })
-    //   .toPromise()
-    //   .then((res: QueryResultType) => {
-    const res = RESULTS_DATA;
-    console.log(res);
-    const tempData = [];
-    for (const dbName in res) {
-      const dbO = res[dbName];
-      const properties = [];
-      for (const label in dbO) {
-        const labelValue = dbO[label];
-        if (typeof labelValue === 'string') {
-          properties.push({
-            label,
-            values: [labelValue]
+    this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/sparql', this.req)
+      .toPromise()
+      .then((res: QueryResultType) => {
+        // const res = RESULTS_DATA;
+        const tempData = [];
+        for (const dbName in res) {
+          const dbO = res[dbName];
+          const properties = [];
+          for (const label in dbO) {
+            const labelValue = dbO[label];
+            if (typeof labelValue === 'string') {
+              properties.push({
+                label,
+                values: [labelValue]
+              });
+              continue;
+            }
+
+            properties.push({
+              label,
+              values: labelValue.values.map(lVV => lVV.value)
+            });
+          }
+          tempData.push({
+            name: dbName,
+            properties,
+            nodes: [
+              ...(flatten(properties.map(
+                (o) => o.values.map(oV => ({label: oV, id: this.sanitizeNodeId(oV)}))
+              )) as Array<Node>),
+              {id: dbName, label: dbName}
+            ] as Array<Node>,
+            edges: flatten(properties.map((o) => o.values.map(oV => ({
+                source: dbName,
+                target: this.sanitizeNodeId(oV),
+                label: o.label,
+                id: this.sanitizeNodeId(oV)
+              }))
+            )) as Array<Edge>,
+            jsonLD: dbO
           });
-          continue;
         }
 
-        properties.push({
-          label,
-          values: labelValue.values.map(lVV => lVV.value)
-        });
-      }
-      tempData.push({
-        name: dbName,
-        properties,
-        nodes: [
-          ...(flatten(properties.map(
-            (o) => o.values.map(oV => ({label: oV, id: oV.split('/')[oV.split('/').length - 1]}))
-          )) as Array<Node>),
-          {id: dbName, label: dbName}
-        ] as Array<Node>,
-        edges: flatten(properties.map((o) => o.values.map(oV => ({
-            source: dbName,
-            target: oV.split('/')[oV.split('/').length - 1],
-            label: o.label,
-            id: oV.split('/')[oV.split('/').length - 1]
-          }))
-        )) as Array<Edge>,
-        jsonLD: dbO
+
+        this.dbData = tempData;
+        this.queryResults = true;
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Retrieving user data failed. Try again later.');
       });
-    }
-
-
-    this.dbData = tempData;
-    this.queryResults = true;
-    // })
-    // .catch((err) => {
-    //   console.error(err);
-    //   this.openSnackBar('Retrieving user data failed. Try again later.');
-    // });
   }
 
 
