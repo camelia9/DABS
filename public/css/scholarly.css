@@ -18,6 +18,10 @@ body {
   background: #f7f7f7;
   color: #434343;
 }
+code { /* Adaugat de TAV */
+  display: block;
+  white-space: pre-wrap   
+}
 header {
   border-top: 8px solid #2196f3;
   border-bottom: 2px solid #BDD5E9;
@@ -394,4 +398,6 @@ aside[typeof="schema:WPSideBar"] {
   figure {
     background: transparent;
   }
+  
+  
 }

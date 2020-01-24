@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>DABS - Database Smart Web Tool</title>
+  <link rel="stylesheet" href="public/css/scholarly.css">
+  <link rel="stylesheet" href="public/js/prismjs/themes/prism-coy.css">
+  <script src="public/js/prismjs/prism.js" defer></script>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body prefix="schema: http://schema.org/ xsd: http://www.w3.org/2001/XMLSchema# sa: https://ns.science.ai/">
+<header>
+  <p class="title">Database Smart Web Tool</p>
+  <p class="subtitle">DABS</p>
+</header>
+<article id="what" typeof="schema:ScholarlyArticle" resource="#">
+  <h1>DABS - Database Smart Web Tool</h1>
+  <section>
+    <ol>
+      <li property="schema:contributor" typeof="sa:ContributorRole">
+        <a property="schema:contributor" href="https://github.com/gcalancea" typeof="schema:Person">
+          <span property="schema:givenName">Cristina - Georgiana</span>
+          <span property="schema:familyName">Calancea</span>
+        </a>
+      </li>
+      <li property="schema:contributor" typeof="sa:ContributorRole">
+        <a property="schema:contributor" href="https://github.com/tavy14t" typeof="schema:Person">
+          <span property="schema:givenName">Ionut - Octavian</span>
+          <span property="schema:familyName">Ilie</span>
+        </a>
+      </li>
+      <li property="schema:contributor" typeof="sa:ContributorRole">
+        <a property="schema:contributor" href="https://github.com/camelia9" typeof="schema:Person">
+          <strong>
+            <span property="schema:givenName">Camelia - Maria</span>
+            <span property="schema:familyName">Milut</span>
+          </strong>
+        </a>
+      </li>
+    </ol>
+    <ol>
+      <li id="scienceai">
+        <a href="https://www.info.uaic.ro/bin/Main/" typeof="schema:Corporation">
+          <span property="schema:name">Faculty of Computer Science</span>
+        </a>
+      </li>
+    </ol>
+  </section>
+
+  <section typeof="sa:Abstract" id="abstract">
+    <h2>Abstract</h2>
+    <p>
+      DABS - Database Smart Web Tool is a Web tool able to compare, run,
+      visualize, and recommend various database management systems (DBMS)
+      according to developer preferences and specific usages – e.g., implementing
+      financial desktop applications, e-commerce Web applications, educational platforms,
+      document management systems or others.
+    </p>
+    <p>We wish to develop a smart platform which will be able to provide an innovative mean to find the most suitable
+      solutions for project developing,
+      in order to be up to date with the cutting edge database technologies. Our secondary goal is to facilitate the
+      process through which our users can learn new skills regarding databases usage methods. All of the provided
+      functionalities
+      are presented in a user-friendly maner through a web interface, whilst offerint a powerful tool not only for
+      experienced developers but also for rookies.
+    </p>
+  </section>
+
+  <section typeof="sa:Results" id="definition">
+    <h2>Architecture</h2>
+    <p>
+      In the first section we briefly described the main goals of the application. The architecture has two main
+      components:
+      a front-end part, for the client interaction, built over Angular Material JS framework and a back-end component
+      implemented in NodeJs, designed following a few well known paradigms and hosted by using various resources
+      provided by the AWS Cloud Platform. These two components will communicate over the HTTP protocol, using the JSON
+      and its extension JSON-LD as the established data exchange format. The client will build JSON requests to send
+      requests toward the backend component, while the received responses will be in the JSON-LD format. In the frontend
+      implementation, we'll have a module for JSON-LD to HTML+RDFa, in order to have semantic data encoded right in our
+      single page application.
+    </p>
+    <p>The web services conglomerate provides a variety of functionalities, such as getting a news feed list containg
+      the
+      latest news in the world of databases, finding the most suitable datase for certain kinds of projects, a
+      playground for
+      multiple database solutions and the visualization of our user's preferences relatively to our apps proposed
+      technologies. An advantage to the proposed architecture is that each and every functionality is independent to the
+      other, therefore our application will not be fully affected if a downtime were to occur in one of the given
+      components. More details about each component's particular behaviour can be seen in the corresponding sections
+      from below.
+    </p>
+
+    <figure typeof="sa:Image">
+      <img src="public/resources/web-arch.png" width="880" height="655">
+      <figcaption>
+        <center>Architecture of the Database Smart Web Tool</center>
+      </figcaption>
+    </figure>
+  </section>
+  <section id="back-end">
+    <h3>Back-end Component</h3>
+    <p>
+      The Back-end Component Architecture is built over two main paradigms: 'REST' and 'Serverless'.
+    </p>
+    <ul>
+      <li><p><a href="https://www.codecademy.com/articles/what-is-rest">REST</a> or REpresentational State Transfer, is
+        an architectural style for providing standards between computer systems on the web, making it easier for systems
+        to communicate with each other.
+        REST-compliant systems, often called RESTful systems, are characterized by how they are stateless and separate
+        the concerns of client and server.</p></li>
+      <li><p><a href="https://serverless-stack.com/chapters/what-is-serverless.html">Serverless</a> computing (or
+        serverless for short), is an execution model where the cloud provider (AWS, Azure, or Google Cloud) is
+        responsible for executing a piece of code by dynamically allocating the resources.
+        And only charging for the amount of resources used to run the code.
+        The code is typically run inside stateless containers that can be triggered by a variety of events including
+        http requests, database events, queuing services, monitoring alerts, file uploads, scheduled events (cron jobs),
+        etc. The code that is sent to the cloud provider for execution is usually in the form of a function.
+        Hence serverless is sometimes referred to as “Functions as a Service” or “FaaS”.</p></li>
+
+    </ul>
+
+    <p>
+      This module is composed of the following components:
+    <ul>
+      <li>
+        <a href="https://aws.amazon.com/api-gateway/">AWS Api Gateway</a> - Its role is to aggregate the lambda
+        functions cluster and to secure a unique point of access to all functionalities for the web client to call. From
+        the gateway, the request can go two ways: either to the authentication lambda (if the user is not logged in,
+        therefore he does not have a JWT token) or to the authorization lambda (if the user has a JWT token and
+        therefore is already authenticated).
+      </li>
+      <li>
+        <a href="https://aws.amazon.com/lambda/">Authentication Lambda</a> - Its purpose is to fullfil the process of
+        logging in for users that want to use our services. In the SignIn View of our application, the user can select
+        either to login with one of his social media accounts or to log in with an account from our system. This option
+        is sent towards this lambda, which will verify the provided details either by consulting an API from Google,
+        Facebook or Twitter or by searching the user + hash password combination using the SparQL Query Runner Endpoint
+        on the users dabatase from our GraphDB instance. If the login process is successful, a JWT will be returned to
+        user in the frontend application, which will be stored in cookies for further usage when sending the requests.
+        If the login process fails, a HTTP specific error code will be returned alongside with an error message.
+      </li>
+      <li>
+        <a href="https://aws.amazon.com/lambda/">Authorization Lambda</a> - This service provides the authorization step
+        that allows the user access to the functionalities enclosed in the other lambdas. When a request is received
+        through the API Gateway, it will first arrive here, where the provided JWT token is validated by searching if
+        there is an active session associated to the IP + JWT + user_id combination. If the token does not exist or it
+        is expired, an error response is sent back to the user. If the authorization is successfull, the request is
+        forwarded to the lambda that handles the requested functionality.
+      </li>
+      <li>
+        <a href="https://aws.amazon.com/dynamodb/">DynamoDB Host</a> - In this host we have a database for the active
+        user sessions, which will contain the IP + JWT + user_id pairs; This will be used in the Authentication Lambda
+        to insert an active session for the logged in user and will be further consulted by the Authorization Lambda to
+        validate the authenticity of the JWT token.
+      </li>
+      <li>
+        <a href="https://aws.amazon.com/lambda/">User Lambda</a> - This lambda exposes functionalities for the user
+        entity manipulations, such as adding an user to the RDF data store, updating one or deleting one.
+      </li>
+      <li>
+        <a href="https://aws.amazon.com/lambda/">Preferences Lambda</a> - This lambda exposes functionalities for the
+        user's preferences entity manipulations, such as adding a preference to the RDF data store, updating one or
+        deleting one. It is also used for retrieving all preferences. The responses from this endpoint are in JSON-LD
+        format for entity related functionalities.
+      </li>
+      <li>
+        <a href="https://aws.amazon.com/lambda/">Database Lambda</a> - This lambda exposes functionalities for the
+        databse entity manipulations, such as adding a new database to the RDF data store, updating one or deleting one.
+        It is also used for retrieving all databases. Furthermore, this lambda is used for gaining access to the
+        database playground cluster that allows the user to try different technologies, such as Mongo, Redis and
+        PostgreSQL. The responses from this endpoint are in JSON-LD format for entity related functionalities, while the
+        others are in plain JSON.
+      </li>
+      <li>
+        <a href="https://aws.amazon.com/lambda/">News Feed Lambda</a> - This lambda allows the retrieval of the latest
+        news about databases. It uses DbWeekly as a data source, which can be integrated in the application using
+        tefter.io. The responses from this endpoint are in plain JSON.
+      </li>
+      <li>
+        <a href="https://www.w3.org/TR/rdf-sparql-query/">SparQL Query Runner Endpoint</a> - This component is in charge
+        of transforming the received parameters in lambdas (through requests) in various SparQL queries, depending on
+        which data source we need to interogate. Once the response is received in the lambda from GraphDB, it will be
+        sent as JSON-LD back to the client.
+      </li>
+      <li>
+        <a href="https://dbdb.io/">Database Playground</a> - It is composed of one Redis instance, one PostgreSQL
+        instance and one MongoDB instance, all deployed in AWS, eventually on a dedicated VM. They will be queried
+        directly by the Database Lambda when someone sends a query.
+      </li>
+      <li>
+        <a href="http://graphdb.ontotext.com">GraphDB Host</a> - It is used to store the RDF data for our three main
+        entities: Users, Databases and Preferences. It will be queried from the SparQL Query Runner Endpoint.
+      </li>
+    </ul>
+    </p>
+    <p>
+      As a summary, the Lambda functions offer the main functionalities, being the core elements of our architecture.
+      They are aggregated via an API Gateway, which oferrs an unique point of access for the web client. Some of the
+      lambda functions communicate with data sources represented as ontologies for databases, users and preferences
+      stored in a RDF repository (GraphDB).
+      The query language for accessing the datasources is SparQL and the communication contract established between the
+      client and the services provider is a
+      mix between JSON (used for request) and JSON-LD (sent through responses).
+      The resource access is made securely via a midway security lambda that ensures all the API calls have to be from
+      logged users. The way to interact with the API can be seen in the API specification from our <a
+      href="https://app.swaggerhub.com/apis/DABS/wade.dabs/1.0.0-oas3"> SwaggerHub Project</a>.
+    </p>
+
+  </section>
+  <section id="front-end">
+    <h3>Front-end Component</h3>
+
+    <p>The user interface will be created using the AngularJS framework combined with Material Design, which is ideal
+      for building single-page applications. AngularJS Material is an implementation of Google's Material Design
+      Specification (2014-2017). This project provides a set of reusable, well-tested, and accessible UI components for
+      AngularJS developers. The web interface will be hosted in AWS S3 Bucket, in order to communicate easily with the
+      other components of the project. The data which is used to populate the web page in specific context is received
+      either in the JSON format or its extension JSON-LD. For the latter, we'll use a parser to transform it in
+      HTML+RDFa format, which will be loaded into the page using custom built AngularJS directives.
+    </p>
+    <p>
+      In the following figure, right side, we can see the sign in page, which will be the first view an user sees. There
+      are two main options to authenticate in the application: either login with an account created in our application
+      or log in with a social media account. The log-in step is necessary because we want to be able to gather data
+      about the user preferences in order to build some statistics on various periods of time and to know which
+      technologies may be suited for each and every user. If the user does not have an account, nor does he want to log
+      in with social media, there is a create account section, which can be seen in the left side of the picture. It
+      requires some simple information, such as email, password and name. Once the user authenticates successfully in
+      our application a JWT token is generated for the current session. The JWT should be passed along with each
+      subsequent request in order to fullfil the auhtorization process for the backend functionalities.
+    </p>
+
+    <figure typeof="sa:Image" width="500" height="400">
+      <img src="public/resources/login.png" width="500" height="400">
+      <figcaption>
+        <center>SignIn View and SignUp View</center>
+      </figcaption>
+    </figure>
+    <p>
+      In the next figure, we can see the Home View, where we first present the current trends in database searches for
+      the past week. This graphic's data
+      is computed using our user's past queries and preferences and the technology recommendations they resulted in
+      (gathered from his inputs in the Recommendation Wizard). The second chart analyses the our users past queries
+      based on different criteria such as searches paradigms, running environments,
+      types of databases and so on ans so forth. It should highlight the most searched values in order to help the user
+      gain insight over what is trending right now. The second part of this page is composed of a newsfeed with the most
+      recent information gathered from DBWeekly. The user is able to share this
+      information through his social media account (if he is logged in with one) or send it through email (if he is
+      logged in with an application specific account). There is also an option to view the original source, should he
+      want to look into similar older articles. The main navigation menu is available in the upper right side of the
+      page. It allows us to switch between the dynamic views of our single page application. In the left upper corner,
+      there is a small menu which allows the user to log out of the application or switch to a view with his accounts
+      data and settings.
+    </p>
+    <figure typeof="sa:Image" width="440" height="327">
+      <img src="public/resources/Screenshot 2019-11-21 at 6.07.25 PM.png" width="440" height="327">
+      <figcaption>
+        <center>Home View - Trends Overview & News Feed</center>
+      </figcaption>
+    </figure>
+    In the Recommendation Tool View the user is able to select values for the various filtering criteria available. Once
+    the values have been selected, the user can submit his search. Below he can see the top three search results that
+    match his criteria, alongside with the available RDFa information and a knowledge graph (for each result) that ties
+    each search result to other types of databases that may be similar in some ways.
+    <figure typeof="sa:Image" width="440" height="327">
+      <img src="public/resources/Screenshot 2019-11-21 at 7.19.56 PM.png" width="440" height="327">
+      <figcaption>
+        <center>Recommendation Tool View</center>
+      </figcaption>
+    </figure>
+    In the Database Playground module, the user is able to select a database type from one of the three available
+    options: MongoDB (Document Based), Redis( Key/Value Store) and PostgreSQL. After selecting a database, a shell will
+    be spawned, which will allow the user to run certain queries on each database. First, he should make the setup for
+    the database (such as creating a database, a table/collection, maybe define a schema) and then he can perform
+    queries. Every operation is sent to the backend component and processed during the user's session. The responses to
+    the operations (received from backend) will be shown to the user in this shell. Once the session has ended, the
+    database the user created will be dropped, in order to keep a clean and available playground for all users.
+    <figure typeof="sa:Image" width="440" height="327">
+      <img src="public/resources/Screenshot 2019-11-21 at 8.27.27 PM.png" width="440" height="327">
+      <figcaption>
+        <center>Database Playground</center>
+      </figcaption>
+    </figure>
+
+  </section>
+
+  <section id="technologies">
+    <h3>Technologies</h3>
+    <ul>
+      <li><p><a href="https://nodejs.org/en/">NodeJS</a> is an open-source, cross-platform, JavaScript runtime
+        environment that executes JavaScript code outside of a browser.
+        Node.js has an event-driven architecture capable of asynchronous I/O. These design choices aim to optimize
+        throughput and scalability in web applications with many input/output operations, as well as for real-time Web
+        applications</p></li>
+      <li><p><a href="https://angular.io/">AngularJS</a> is a structural framework for dynamic web apps.
+        It lets you use HTML as your template language and lets you extend HTML’s syntax to express your application’s
+        components clearly and succinctly.
+        Angular’s data binding and dependency injection eliminate much of the code you currently have to write.
+        And it all happens within the browser, making it an ideal partner with any server technology.</p></li>
+      <li><p><a href="https://aws.amazon.com/">AWS (Amazon Web Services)</a> is a secure cloud services platform,
+        offering compute power, database storage, content delivery and other functionality to help businesses scale and
+        grow.</p></li>
+      <li><p><a href="http://graphdb.ontotext.com/">GraphDB</a> is an enterprise ready Semantic Graph Database,
+        compliant with W3C Standards.
+        Semantic graph databases (also called RDF triplestores) provide the core infrastructure for solutions where
+        modelling agility, data integration, relationship exploration and cross-enterprise data publishing and
+        consumption are important.</p></li>
+      <li><p><a href="https://json-ld.org/">JSON-LD</a> is a lightweight Linked Data format.
+        It is based on the JSON format and provides a way to help JSON data interoperate at Web-scale.
+        JSON-LD is an ideal data format for programming environments, REST Web services, and unstructured databases.</p>
+      </li>
+      <li><p><a href="https://jwt.io">JWT (JSON Web Tokens)</a> is an open standard (RFC 7519) that defines a compact
+        and self-contained way for securely transmitting information between parties as a JSON object. This information
+        can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC
+        algorithm) or a public/private key pair using RSA.</p></li>
+      <li><p><a href="https://www.mongodb.com">MongoDB</a> is a cross-platform document-oriented database program.
+        Classified as a NoSQL database program, MongoDB uses JSON-like documents with schema. MongoDB is developed by
+        MongoDB Inc. and licensed under the Server Side Public License (SSPL).</p></li>
+      <li><p><a href="https://redis.io">Redis</a> is an open source (BSD licensed), in-memory data structure store, used
+        as a database, cache and message broker. It supports data structures such as strings, hashes, lists, sets,
+        sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries and streams. Redis
+        has built-in replication, Lua scripting, LRU eviction, transactions and different levels of on-disk persistence,
+        and provides high availability via Redis Sentinel and automatic partitioning with Redis Cluster.</p></li>
+      <li><p><a href="https://www.postgresql.org">PostgreSQL</a> is a powerful, open source object-relational database
+        system with over 30 years of active development that has earned it a strong reputation for reliability, feature
+        robustness, and performance.</p></li>
+      <li><p><a href="https://aws.amazon.com/lambda/">AWS Lambda</a> lets you run code without provisioning or managing
+        servers. You pay only for the compute time you consume - there is no charge when your code is not running. With
+        Lambda, you can run code for virtually any type of application or backend service - all with zero
+        administration. Just upload your code and Lambda takes care of everything required to run and scale your code
+        with high availability. You can set up your code to automatically trigger from other AWS services or call it
+        directly from any web or mobile app.</p></li>
+      <li><p><a href="https://aws.amazon.com/dynamodb/">AWS DynamoDB</a> is a key-value and document database that
+        delivers single-digit millisecond performance at any scale. It's a fully managed, multiregion, multimaster,
+        durable database with built-in security, backup and restore, and in-memory caching for internet-scale
+        applications. DynamoDB can handle more than 10 trillion requests per day and can support peaks of more than 20
+        million requests per second.</p></li>
+      <li><p><a href="https://aws.amazon.com/api-gateway/">AWS API Gateway</a> is a fully managed service that makes it
+        easy for developers to create, publish, maintain, monitor, and secure APIs at any scale. With a few clicks in
+        the AWS Management Console, you can create REST and WebSocket APIs that act as a “front door” for applications
+        to access data, business logic, or functionality from your backend services, such as workloads running on Amazon
+        Elastic Compute Cloud (Amazon EC2), code running on AWS Lambda, any web application, or real-time communication
+        applications. API Gateway handles all the tasks involved in accepting and processing up to hundreds of thousands
+        of concurrent API calls, including traffic management, authorization and access control, monitoring, and API
+        version management.</p></li>
+    </ul>
+  </section>
+  <section id="data-modeling">
+    <h3>Data Modeling</h3>
+    <figure typeof="sa:Image">
+      <img src="public/resources/Entities.png" width="880" height="655">
+      <figcaption>
+        <center>RDF Graph of Database Ontology</center>
+      </figcaption>
+    </figure>
+    <p>
+      The main storage solution used for the above presented graph is the RDF solution GraphDB. Each entity in the graph
+      is interconnected with others by using properties and relationships. Each entity is described in the tables below.
+      By using the ontology / RDF concepts, Dabs is able to suggest entities in a smart way, based on the relationships
+      between instances. For instance, upon requesting a database by selecting values for some properties, we are able
+      to use the interlinked data from the RDF storage for searching based on past queries of this user and the provided
+      options.
+    </p>
+
+    <figure typeof="schema:Table">
+      <table>
+        <thead>
+        <tr><code>User</code></tr>
+        <tr>
+          <th>
+            <center>Property</center>
+          </th>
+          <th>
+            <center>Type / Range</center>
+          </th>
+          <th>
+            <center>Description</center>
+          </th>
+        </tr>
+        </thead>
+
+        <tr>
+          <td>rdf:type</td>
+          <td>User</td>
+          <td>User type definition</td>
+        </tr>
+        <tr>
+          <td>userID</td>
+          <td>UUID</td>
+          <td>The unique user identifier</td>
+        </tr>
+        <tr>
+          <td>name</td>
+          <td>string</td>
+          <td>The name of the user</td>
+        </tr>
+        <tr>
+          <td>preferences</td>
+          <td>array[Preference]</td>
+          <td>A user can have many preferences</td>
+        </tr>
+        <tr>
+          <td>password</td>
+          <td>string</td>
+          <td>A hash for the password chosen by the user - optional field</td>
+        </tr>
+        <tr>
+          <td>email</td>
+          <td>string</td>
+          <td>the email of the user</td>
+        </tr>
+
+        <caption>
+          The list of properties of the <code>User</code> entity along with their data
+          types.
+        </caption>
+      </table>
+    </figure>
+
+    <figure typeof="schema:Table">
+      <table>
+        <thead>
+        <tr><code>Preference</code></tr>
+        <tr>
+          <th>
+            <center>Property</center>
+          </th>
+          <th>
+            <center>Type / Range</center>
+          </th>
+          <th>
+            <center>Description</center>
+          </th>
+        </tr>
+        </thead>
+        <tr>
+          <td>rdf:type</td>
+          <td>Preference</td>
+          <td>Preference type definition</td>
+        </tr>
+        <tr>
+          <td>user</td>
+          <td>User</td>
+          <td>A preference belongs to a user</td>
+        </tr>
+        <tr>
+          <td>database</td>
+          <td>Database</td>
+          <td>A preference points towards a database</td>
+        </tr>
+        <tr>
+          <td>preferenceID</td>
+          <td>UUID</td>
+          <td>The unique ID in Dabs for this Preference</td>
+        </tr>
+
+        <tr>
+          <td>viewedCount</td>
+          <td>int</td>
+          <td>The number of time this technology was seen by a user</td>
+        </tr>
+
+        <tr>
+          <td>lastUpdate</td>
+          <td>date</td>
+          <td>Last time the user saw this technology - last update for this entry</td>
+        </tr>
+
+        <caption>
+          The list of properties of the <code>Preferences</code> entity along with their data types.
+        </caption>
+      </table>
+    </figure>
+
+    <figure typeof="schema:Table">
+      <table>
+        <thead>
+        <tr><code>Database</code></tr>
+        <tr>
+          <th>
+            <center>Property</center>
+          </th>
+          <th>
+            <center>Type / Range</center>
+          </th>
+          <th>
+            <center>Description</center>
+          </th>
+        </tr>
+        </thead>
+
+        <tr>
+          <td>rdf:type</td>
+          <td>Database</td>
+          <td>The type of the database</td>
+        </tr>
+
+        <tr>
+          <td>databaseID</td>
+          <td>string</td>
+          <td>The unique ID of the database in Dabs</td>
+        </tr>
+
+        <tr>
+          <td>model</td>
+          <td>string</td>
+          <td>The model of the database</td>
+        </tr>
+
+        <tr>
+          <td>schema</td>
+          <td>string</td>
+          <td>The schema of the database</td>
+        </tr>
+
+        <tr>
+          <td>license</td>
+          <td>string</td>
+          <td>The license of the database</td>
+        </tr>
+        <tr>
+          <td>supportsIndex</td>
+          <td>string</td>
+          <td>Tells if the database supports index</td>
+        </tr>
+        <tr>
+          <td>supportsTyping</td>
+          <td>string</td>
+          <td>Tells if the database supports typing</td>
+        </tr>
+        <tr>
+          <td>label</td>
+          <td>string</td>
+          <td>Tells the name of the database</td>
+        </tr>
+        <tr>
+          <td>platform</td>
+          <td>string</td>
+          <td>Tells the platform of the database</td>
+        </tr>
+        <tr>
+          <td>environment</td>
+          <td>string</td>
+          <td>Tells the running environment of the database</td>
+        </tr>
+        <tr>
+          <td>specificUsages</td>
+          <td>string</td>
+          <td>Tells the specific usages of the database</td>
+        </tr>
+        <tr>
+          <td>queryLanguage</td>
+          <td>string</td>
+          <td>Tells the query language of the database</td>
+        </tr>
+
+        <caption>
+          The list of properties of the <code>Database</code> entity along with their data types.
+        </caption>
+      </table>
+    </figure>
+
+  </section>
+
+  <section id="use-case">
+    <h3>Use case</h3>
+    <p>
+      In the below diagram we can see the main flows that an user can explore while using the application.
+      The use case routes are color coded to emphasize the different ways in which
+      a user can interact with our application. Red corresponds to the authentication step, blue corresponds to getting
+      the news feed flow, yellow point to the search for databases recommandations, while green is for viewing
+      preferences and orange for the database solutions playground.
+    </p>
+    <figure typeof="sa:Image">
+      <img src="public/resources/use_case.png" width="880" height="655">
+      <figcaption>
+        <center>DABS complete user flow</center>
+      </figcaption>
+    </figure>
+
+    <p>
+      Below is presented a sequence diagram which shows the step by step interaction between the application's modules
+      when a user requests a database recommandation.
+    </p>
+    <figure typeof="sa:Image">
+      <img src="public/resources/SequenceRecommandations.png" width="880" height="655">
+      <figcaption>
+        <center>Sequence diagram representing the process of getting database recommandations</center>
+      </figcaption>
+    </figure>
+    <p>
+      Below is presented a sequence diagram which shows the step by step interaction between the application's modules
+      when a user requests to simulate various queries for a chosen technology from the ones proposed.
+    </p>
+    <figure typeof="sa:Image">
+      <img src="public/resources/TryOnRecommandations.png" width="880" height="655">
+      <figcaption>
+        <center>Sequence diagram representing the process of trying to use a databse from playground</center>
+      </figcaption>
+    </figure>
+
+  </section>
+  <section id="progress">
+    <h2>Project Progress & Outcome</h2>
+    <p>The final version of our application can be accessed at the following link: <a href="http://ec2-54-93-236-36.eu-central-1.compute.amazonaws.com:4200/">http://ec2-54-93-236-36.eu-central-1.compute.amazonaws.com:4200/</a></p>
+    <p>For those who want to use the app, there is also available a user guide that can be accessed at the following link: <a href="https://camelia9.github.io/dabs-guide">https://camelia9.github.io/dabs-guide</a></p>
+    <h3>Architecture</h3>
+    In respect to the initial design of the architecture, there were several changes that impacted the way users
+      authenticate into our application,
+      the way we used external data sources in order to enrich the data associated to our ontology and the technology used
+      for storing and exposing the data
+      through a SPARQL endpoint. The updated architecture can be seen in the following image:
+      <figure typeof="sa:Image">
+          <img src="public/resources/web-arch-2.png" width="880" height="655">
+          <figcaption>
+            <center>Final Architecture</center>
+          </figcaption>
+        </figure>
+        <p>As it can be seen, Apache Jena Fuseki is now used in order to serve and query the the datasets about Users,
+          Preferences and Databases. GraphDB turned out to
+          not be a viable option for our needs since we wanted an Amazon Cloud Services compatible solution and exposing a
+          GraphDB Server from an EC2 instance did not work
+          smoothly. Even though DBPedia and Wikidata are no longer used as external data sources for the Databases data
+          retrieval process, we managed to enrich our
+          datasource by crawling the content of dbdb.io and format the obtained data in order to fit our ontology
+          description. Regarding the social media authentication, we chose
+          to give up on that idea, since our users are managed based on our conceptual modelling. Therefore, allowing social
+          media authentication would enable a lot of other issues
+          regarding the management of preferences and users, since we may not be able to fit users in our own model. </p>
+        <h3>Functionality Implementation</h3>
+        <h4>Login & SignUp & Logout</h4>
+        <p>The user interface was implemented using the Angular8 framework combined with Material Design, which is ideal
+          for building single-page applications. We decided to upgrade from AngularJS, in order to learn more about the
+          newest trend
+          in frontend development. The web interface is hosted on an AWS EC2 instance, in order to communicate easily with
+          the
+          other components of the project. The data which is used to populate the web page in specific context is received
+          either in the JSON format or its extension JSON-LD. For the latter, we used a custom Angular Library (<a
+            href="https://www.npmjs.com/package/ngx-json-ld">ngx-json-ld</a>) in order to
+          render it into our page and make it available for search engine indexing.
+  
+          In the following figure, right side, we can see the sign in page, which will be the first view an user sees. There
+          are two main options to authenticate in the application: either login with an account created in our application
+          or log in with a social media account. The log-in step is necessary because we want to be able to gather data
+          about the user preferences in order to build some statistics on various periods of time and to know which
+          technologies may be suited for each and every user. If the user does not have an account, nor does he want to log
+          in with social media, there is a create account section, which can be seen in the left side of the picture. It
+          requires some simple information, such as email, password and name. Once the user authenticates successfully in
+          our application a user token is generated for the current session. The user should be passed along with each
+          subsequent request in order to fullfil the auhtorization process for the backend functionalities.</p>
+        <figure typeof="sa:Image">
+          <img src="public/resources/login-ui.png" width="880" height="655">
+          <figcaption>
+            <center>Login View</center>
+          </figcaption>
+        </figure>
+        <figure typeof="sa:Image">
+          <img src="public/resources/create-ui.png" width="880" height="655">
+          <figcaption>
+            <center>Sign Up View</center>
+          </figcaption>
+        </figure>
+        <p></p>
+        <h4>Metrics & NewsFeed</h4>
+        <p>
+          In the next picture, we can see the Home View, comprised of two user friendly functionalities. The data used to
+          generate
+          the graphics is computed using our user's past queries and preferences and the technology
+          recommendations they resulted in (gathered from several user inputs in the Recommendation Wizard).
+          The second chart analyses the users past queries and their distribution relative to the programming languages each
+          database supports.
+          They should highlight the most searched values in order to help the user
+          gain insight over what is trending right now.
+          The data needed to render the charts is retrieved by calling the endpoint <a
+          href="https://35mx80gukj.execute-api.eu-central-1.amazonaws.com/beta/metrics">https://35mx80gukj.execute-api.eu-central-1.amazonaws.com/beta/metrics</a>
+          The second part of this page is composed of a newsfeed with the most
+          recent information gathered from DBWeekly. There is also an option to view the original source, should he want to
+          look into similar older articles.
+          This data was retrieved by implementing a crawler to retrieve the newest data from <a
+          href="https://dbweekly.com/">DBWeekly</a>. This data is cached
+          in order to minimize the waiting time for the user and is refreshed
+          once it is received in the frontend. The crawler code is available on our repository.
+          The main navigation menu is available in the upper right side of the page. It allows us to switch between the
+          dynamic views of our single page application. In the left upper corner, there is a small menu which allows the
+          user to log out of the application or switch to a view with his accounts data and settings.
+          <figure typeof="sa:Image">
+            <img src="public/resources/home-ui.png" width="880" height="655">
+            <figcaption>
+              <center>Home View</center>
+            </figcaption>
+          </figure>
+        </p>
+        <h4>Recommendation Tool</h4>
+      In the Recommendation Tool View the user is able to select values for the various filtering criteria available. Once
+      the values have been selected, the user can submit his search. Below he can see the top three search results that
+      match his criteria, alongside with the available JSON-LD information and a knowledge graph (for each result) that
+      ties
+      each search result to other types of databases that may be similar in some ways. In order to render the knowledge
+      graph we used
+      the <a href="https://swimlane.github.io/ngx-graph/">ngx-graph</a> library, whilst for getting new search results we
+      make subsequent calls to the SPARQL Lambda available at this link:
+      <a href="https://35mx80gukj.execute-api.eu-central-1.amazonaws.com/beta/sparql">https://35mx80gukj.execute-api.eu-central-1.amazonaws.com/beta/sparql</a>
+      <figure typeof="sa:Image">
+        <img src="public/resources/recommandation-ui.png" width="880" height="655">
+        <figcaption>
+          <center>Recommendation Wizard View</center>
+        </figcaption>
+      </figure>
+      <h4>Playground</h4>
+      <p>In respect to the initial goals, we implemented the playground as described before. the user is able to select a
+        database type from one of the three available
+        options: MongoDB (Document Based), Redis( Key/Value Store) and PostgreSQL (Relational Row Based). The web terminal
+        was spawned using the <a href="https://www.npmjs.com/package/ng-terminal">ng-terminal</a>
+        library, whilst the needed databases are hosted and accessible in the Heroku platform. All the user commands given
+        in the
+        terminal are passed along towards our playground endpoint available at the following link: <a
+          href="http://ec2-18-197-191-59.eu-central-1.compute.amazonaws.com:3000/playground/">"http://ec2-18-197-191-59.eu-central-1.compute.amazonaws.com:3000/playground/{DB_NAME}"</a>
+      </p>
+      <figure typeof="sa:Image">
+        <img src="public/resources/playground-ui.png" width="880" height="655">
+        <figcaption>
+          <center>Playground View</center>
+        </figcaption>
+      </figure>
+      <h4>Account Management</h4>
+      <p>In the initial specifications, we did not comprise a view for editing and deleting the user account. Nonetheless,
+        we deemed it to be necessary in order to enhance the user experience.
+        The delete & update requests are processed by the following REST API endpoint: <a
+          href="https://35mx80gukj.execute-api.eu-central-1.amazonaws.com/beta/sparql">https://35mx80gukj.execute-api.eu-central-1.amazonaws.com/beta/users</a>
+      </p>
+      <figure typeof="sa:Image">
+          <img src="public/resources/account-ui.png" width="880" height="655">
+          <figcaption>
+            <center>Account View</center>
+          </figcaption>
+        </figure>
+  </section>
+  <section id="api">
+    <h2>API Specification</h2>
+    <p>
+        The Back-end Component Architecture is built over two main paradigms: 'REST' and 'Serverless'.
+    </br>
+    To ensure the REST part of the application, we used <a href="https://aws.amazon.com/api-gateway/">AWS Api Gateway</a> service, in order to
+    ensure a secure and unique point of access to all functionalities (implemented as FaaS) for the web client to call.
+    From the gateway, we have two scenarios: 
+    <ul>
+        <li>The user is not logged in, so the request is dirrected to the authentication lambda in order to optain a session token</li>
+        <li>A session token is already associated with an user, therefore the call goes to the lambda that implements
+          the requested functionality, but first, the call is filtered by an Authorisation function, which has the role of a proxy.
+        </li>
+      </ul> 
+    
+    The API asures six endpoints, corresponding to the implemented functionalities, as follows:
+
+    </p>
+    <h3>Authorization Endpoint</h3>
+    <p>
+      Authorisatioin endpoint serves as a proxy between API calls and ensures that the protected functionalities are accessed
+      only by logged users. Every API call that needs authorisation is filtred by this function and needs to contain 
+      the following header: Headers: X-Client-ID.
+    </p>
+
+    <h3>Authentication Endpoints</h3>
+    <p>
+      The Authentication endpoints are two: /login and /logout. The first one exposes a POST method that associates
+      a sessionId with the new logged user. This resource is part of the first scenario and it is not filtred through
+      the authorisation proxy. The second one exposes a GET method and ends the session for the currently logged user,
+      this time, the endpoint uses the authentication proxy, making sure that a valid session was used during this
+      method call.
+    </p>
+  
+    <h3>Metrics Endpoints</h3>
+    <p>
+      The metric endpoint offers a GET method that returns data for the two metrics shown in the first page of the application.
+      The lambda function attached to this resource, creates statistics over the user's prefferences.
+      This resource also uses the authorisation proxy.
+    </p>
+    <h3>NewsFeed Endpoint</h3>
+    <p>
+      The NewsFeed Endpoint also offers a GET method and returns the data for the news feed section of the welcome page.
+      The data is collected through a web crawler over the dbweekly web site.
+      This resource also uses the authorisation proxy.
+    </p>
+    <h3>Sparql Endpoint</h3>
+    <p>
+      The Sparql endpoint expose a POST methot that is used when recommending the database sollutions based on options
+      selected by the user in the user form. The method is attached to a Lambda function that makes SPARQL queries over the
+      datasource containing information about the databases.
+      This resource also uses the authorisation proxy.
+    </p>
+    <h3>Users Endpoint</h3>
+    <p>
+      Users endopind offers the following methods:
+      <ul>
+          <li>GET: retreive information about a user, based on a provided userId</li>
+          <li>PUT: used when updating a user's profile data</li>
+          <li>POST: inserts a new user into the dataset</li>
+          <li>DELETE: deletes a user acount</li>
+        </ul> 
+      This resource also uses the authorisation proxy. 
+    </p>
+  </section>
+  <section id="knowledge">
+    <h2>Designed Knowledge Models</h2>
+    <h3>Data Modeling</h3>
+    <figure typeof="sa:Image">
+      <img src="public/resources/new_Entities2.png" width="880" height="655">
+      <figcaption>
+        <center>RDF Graph of Database Ontology</center>
+      </figcaption>
+    </figure>
+
+    <p>
+      The knowledge base of the application consists in three onthologies presented as interconnected graphs. 
+      The three ontologies are representing different concepts: User, Properties and Database Management Systems,  
+      by using owl classes, object properties and data properties.
+      The Preferences ontology serves as a bridge between Users and Database Management Systems, associating
+      a user with his most visualised databases.
+      The main tool used in modeling the knowledge base is Protege.
+      As a starting point, we used
+      <a href="https://github.com/danielamariei/databases-ontology">DB Ontology </a> over wich we added more classes and properties
+      in order to optain the propper data for our users.
+      Each ontology is described in the tables below.
+    </p>
+
+    <figure typeof="schema:Table">
+      <table>
+        <thead>
+        <tr><code>Users</code></tr>
+        <tr>
+          <th>
+            <center>Type</center>
+          </th>
+          <th>
+            <center>Value</center>
+          </th>
+          <th>
+            <center>Description</center>
+          </th>
+        </tr>
+        </thead>
+
+        <tr>
+          <td>owl:Class</td>
+          <td>User</td>
+          <td>User concept definition</td>
+        </tr>
+        <tr>
+          <td>owl:topDataProperty</td>
+          <td>user_ID</td>
+          <td>The unique user identifier (UUID)</td>
+        </tr>
+        <tr>
+          <td>owl:topDataProperty</td>
+          <td>name</td>
+          <td>The name of the user (string)</td>
+        </tr>
+        <tr>
+        <tr>
+          <td>owl:topDataProperty</td>
+          <td>password</td>
+          <td>A hash for the password chosen by the user - optional field</td>
+        </tr>
+        <tr>
+          <td>owl:topDataProperty</td>
+          <td>email</td>
+          <td>the email of the user</td>
+        </tr>
+
+        <caption>
+          The list of properties of the User concept model.
+        </caption>
+      </table>
+    </figure>
+
+    <figure typeof="schema:Table">
+      <table>
+        <thead>
+        <tr><code>Preferences</code></tr>
+        <tr>
+          <th>
+            <center>Type</center>
+          </th>
+          <th>
+            <center>Value</center>
+          </th>
+          <th>
+            <center>Description</center>
+          </th>
+        </tr>
+        </thead>
+        <tr>
+          <td>owl: Class</td>
+          <td>Preference</td>
+          <td>Preference concept definition</td>
+        </tr>
+        <tr>
+          <td>owl:AnnotationProperty</td>
+          <td>User</td>
+          <td>A preference belongs to a user. The annotation is pointing to the Users ontology</td>
+        </tr>
+        <tr>
+          <td>owl:AnnotationProperty</td>
+          <td>Database</td>
+          <td>A preference points towards a database. The annotation is pointing to the Database Management Systems ontology</td>
+        </tr>
+
+        <tr>
+          <td>owl:topDataProperty</td>
+          <td>viewedCount</td>
+          <td>The number of time this technology was seen by a user</td>
+        </tr>
+
+        <caption>
+          The list of properties of the Preferences concept model.
+        </caption>
+      </table>
+    </figure>
+
+    <figure typeof="schema:Table">
+      <table>
+        <thead>
+        <tr><code>Database Management Systems</code></tr>
+        <br>
+        <tr>
+          <th>
+            <center>Type</center>
+          </th>
+          <th>
+            <center>Value</center>
+          </th>
+          <th>
+            <center>Description</center>
+          </th>
+        </tr>
+        </thead>
+
+        <tr>
+          <td>owl:Class</td>
+          <td>Database Management System</td>
+          <td>Type of a database</td>
+        </tr>
+        <tr>
+            <td>owl:Class</td>
+            <td>Data Model</td>
+            <td>The data model of a database (ex: DocumentModel)</td>
+          </tr>
+          <tr>
+              <td>owl:Class</td>
+              <td>Programming Language</td>
+              <td>The programming language supported by a database</td>
+            </tr>
+            <tr>
+                <td>owl:Class</td>
+                <td>Index</td>
+                <td>The type of index supported by a database</td>
+              </tr>
+              <tr>
+                  <td>owl:Class</td>
+                  <td>Storage Model</td>
+                  <td>The type of stoarage a database has (ex: db:RowOriented)</td>
+                </tr>
+                <tr>
+                    <td>owl:Class</td>
+                    <td>Software License</td>
+                    <td>The type of license a database has (ex: Commercial)</td>
+                  </tr>
+                  <tr>
+                      <td>owl:Class</td>
+                      <td>Opperating System</td>
+                      <td>The type of Opperating System or Systems a database can be supported on</td>
+                    </tr>
+                    <tr>
+                        <td>owl:Class</td>
+                        <td>Concurrency Control Mechanism</td>
+                        <td>The type of concurency control mechanism used by a database (Multi-version Concurrency Control)</td>
+                      </tr>
+                      <tr>
+                          <td>owl:Class</td>
+                          <td>QueryLanguage</td>
+                          <td>The query language supported by a database</td>
+                        </tr>
+
+        <tr>
+          <td>owl:ObjectProperty</td>
+          <td>hasDataModel</td>
+          <td>Propperty connecting a Database Management System instance with a Data Model instance</td>
+        </tr>
+        <tr>
+            <td>owl:ObjectProperty</td>
+            <td>supportsProgrammingLanguage</td>
+            <td>Propperty connecting a Database Management System instance with a ProgrammingLanguage instance</td>
+          </tr>
+          <tr>
+              <td>owl:ObjectProperty</td>
+              <td>supportsIndexing</td>
+              <td>Propperty connecting a Database Management System instance with an Index instance</td>
+            </tr>
+            <tr>
+                <td>owl:ObjectProperty</td>
+                <td>hasStorageModel</td>
+                <td>Propperty connecting a Database Management System instance with a Storage Model instance</td>
+              </tr>
+              <tr>
+                  <td>owl:ObjectProperty</td>
+                  <td>hasSoftwareLicense</td>
+                  <td>Propperty connecting a Database Management System instance with a Software License instance</td>
+                </tr>
+                <tr>
+                    <td>owl:ObjectProperty</td>
+                    <td>supportsOpperatingSystem</td>
+                    <td>Propperty connecting a Database Management System instance with a Opperating System instance</td>
+                  </tr>
+                  <tr>
+                      <td>owl:ObjectProperty</td>
+                      <td>supportsConcurencyControlMechanism</td>
+                      <td>Propperty connecting a Database Management System instance with a Concurency Control Mechanism instance</td>
+                    </tr>
+                    <tr>
+                        <td>owl:ObjectProperty</td>
+                        <td>supportsQueryLanguage</td>
+                        <td>Propperty connecting a Database Management System instance with a Query Language instance</td>
+                      </tr>
+                      <tr>
+                          <td>owl:AnnotationProperty</td>
+                          <td>rdfs:label</td>
+                          <td>Label representing the name of a class or property</td>
+                        </tr>
+        </tr>
+
+        <caption>
+          The list of classes and properties constructingt the Database Management System ontology.
+        </caption>
+      </table>
+    </figure>
+
+  </section>
+  <section id="data-build">
+    <h2>Building and Enriching the Data Sources</h2>
+    <p>
+      The structure of the databases knowledge base was enriched with data collected from the database of the databases 
+      <a href="https://dbdb.io/">dbdb.io</a> . This database of databases is a reaserch project lead by The Database Group at Carnegie Mellon University,
+     a leading research collective that focuses on database systems, data mining, and machine learning.
+    </br>
+       The data was collected using a web crawler that parsed over the web site pages and retreived information about databases
+       respecting the schema defined by the Database Management Systems ontology. After the data was collected and processed
+       we creeated new instancess for classes and linkes between them, accordingly.
+    </p>
+  <p>
+    The other two ontologies were enhanced by user activity. Every time a new user creates an acount, a new instance
+    of type user is added. In order to have GDPR (General Data Protection Regulation) mechanisms, the application
+    offers a <i>Delete account</i> option that removes the user's account and all the other resources associated with it (prefferences).
+    The prefferences are asociated with an user as follows: when a user is interested in a database, that database is added as an
+    associate prefference.
+  </br>
+  </p>
+
+  </section>
+  <section id="data-usage">
+    <h2>Querying the Data Sources</h2>
+    <p>
+        For querying the data sources, the backend uses Apache Jena Fuseki. Two datasets were uploaded, one for
+        users and preferences, and another one containing the databases information. In the lambda functions, in order
+        to acces these data sources, a python module named <a href="https://pypi.org/project/SPARQLWrapper/">
+        SPARQLWrapper</a> was used. Having two datasets, some functionalities had to be developed using queries to
+        both Jena's endpoints, and join the results locally, in the lambda function.
+        <br>Examples of queries:
+        <h4>Query for registering a new user into dataset</h4>
+        <code>
+            PREFIX owl: &lthttp://www.w3.org/2002/07/owl#&gt
+            PREFIX rdf: &lthttp://www.w3.org/1999/02/22-rdf-syntax-ns#&gt
+            PREFIX users: &lthttp://www.semanticweb.org/ontologies/users#&gt
+       
+            INSERT DATA {
+                users:{email.split('@')[0]} rdf:type users:User ;
+                users:email "{email}" ;
+                users:name "{name}" ;
+                users:password "{sha256(password)}" ;
+                users:user_id "{uuid.uuid4()}" .
+            }
+        </code>
+        <h4>Query for retrieving the users' preferences</h4>
+        <code>
+            PREFIX users: &lthttp://www.semanticweb.org/ontologies/users#&gt
+            PREFIX preferences: &lthttp://www.semanticweb.org/milut/ontologies/preferences#&gt
+            PREFIX rdf: &lthttp://www.w3.org/1999/02/22-rdf-syntax-ns#&gt
+            PREFIX owl: &lthttp://www.w3.org/2002/07/owl#&gt
+            PREFIX rdfs: &lthttp://www.w3.org/2000/01/rdf-schema#&gt
+       
+            SELECT ?db ?user_id ?views
+            WHERE {
+            ?db rdf:type preferences:Preference .
+            optional {
+                ?db preferences:views_count ?views .
+            }
+            optional {
+                ?db preferences:users ?user .
+                ?user users:user_id ?user_id .
+            }
+            }
+        </code>
+        <h4>Query for retrieving programming languages for a database</h4>
+        <code>
+            PREFIX preferences: &lthttp://www.semanticweb.org/milut/ontologies/preferences#&gt
+            PREFIX rdfs: &lthttp://www.w3.org/2000/01/rdf-schema#&gt
+            PREFIX users: &lthttp://www.semanticweb.org/ontologies/users#&gt
+            PREFIX owl: &lthttp://www.w3.org/2002/07/owl#&gt
+            PREFIX : &lthttp://www.semanticweb.org/ontologies/databases/tbox/&gt
+   
+            SELECT ?label
+            WHERE {
+            :{db_individual} a :DatabaseManagementSystem  ;
+            :supportsProgrammingLanguage ?prg .
+            ?prg rdfs:label ?label
+            }
+        </code>
+
+  </section>
+  <section id="conclusion">
+    <h2>Conclusions</h2>
+    <p>
+      To sum up, this solution can be a valuable tool for any developer who is in search for trending technologies that
+      are the most suited for his end goal. It also provides an intuitive web UI which allows the user to explore all of
+      the applications features. Furthermore, all functionalities can be queried through an API (without actually
+      needing the client), since we have a decoupled and distributed architecture.
+    </p>
+    <p>
+      As for the future work, we propose enriching the available data sources for querying technologies, allowing access
+      for a few more technologies in the playground and extending the social media handles integration to the point
+      where users can share between eachother interesting choices of databases and rate the quality of our
+      recommandations in order to improve with each and every query.
+    </p>
+    <p>
+      Nonetheless, the importance of these kind of approaches in the next web is crucial, as David Amerland emphasizes
+      in <a href="https://www.goodreads.com/work/quotes/23933277">Google Semantic Search: Search Engine Optimization
+      (Seo) Techniques That Get Your Company More Traffic, Increase Brand Impact, and Amplify Your Online Presence</a>
+      and hopefully we bring with this project a small contribution to a better future.
+    </p>
+    <aside typeof="schema:WPSideBar">
+      <center>
+        “A pair of eyes attached to a human brain can quickly make sense of the content presented on a web page and
+        decide whether it has the answer it’s looking for or not in ways that a computer can’t. Until now.” - David
+        Amerland
+      </center>
+    </aside>
+  </section>
+  <section typeof="sa:ReferenceList" id="references">
+    <h2>References</h2>
+    <dl>
+      <dt>NodeJS</dt>
+      <dd id="ref-ionic" typeof="schema:CreativeWork"
+          resource="https://nodejs.org/en/">
+        <cite property="schema:name">
+          <a href="https://nodejs.org/en/">NodeJS</a>
+        </cite>,
+        by
+        <span property="schema:author" typeof="schema:Organization">
+          <span property="schema:name">Joyent, Inc.</span>
+        </span>
+      </dd>
+
+
+      <dt>AngularJS Framework</dt>
+      <dd id="ref-angular" typeof="schema:CreativeWork"
+          resource="https://angular.io/">
+        <cite property="schema:name">
+          <a href="https://angular.io/">Angular</a>
+        </cite>,
+        by
+        <span property="schema:author" typeof="schema:Organization">
+          <span property="schema:name">Google</span>
+        </span>
+      </dd>
+
+      <dt>serverless</dt>
+      <dd id="ref-serverless" typeof="schema:CreativeWork"
+          resource="https://serverless.com/">
+        <cite property="schema:name">
+          <a href="https://serverless.com/">serverless</a>
+        </cite>,
+        by
+        <span property="schema:author" typeof="schema:Organization">
+          <span property="schema:name">The Serverless Team</span>
+        </span>
+      </dd>
+
+      <dt>Amazon Web Services</dt>
+      <dd id="ref-ionic" typeof="schema:CreativeWork"
+          resource="https://aws.amazon.com/">
+        <cite property="schema:name">
+          <a href="https://aws.amazon.com/">AWS</a>
+        </cite>,
+        by
+        <span property="schema:author" typeof="schema:Organization">
+          <span property="schema:name">Amazon</span>
+        </span>
+      </dd>
+
+      <dt>GraphDB</dt>
+      <dd id="ref-ionic" typeof="schema:CreativeWork"
+          resource="https://ontotext.com/products/graphdb/">
+        <cite property="schema:name">
+          <a href="https://ontotext.com/products/graphdb/">GraphDB</a>
+        </cite>,
+        by
+        <span property="schema:author" typeof="schema:Organization">
+          <span property="schema:name">Ontotext</span>
+        </span>
+      </dd>
+
+
+      <dt>SwaggerHub - OpenAPI</dt>
+      <dd id="ref-ionic" typeof="schema:CreativeWork"
+          resource="https://app.swaggerhub.com/">
+        <cite property="schema:name">
+          <a href="https://app.swaggerhub.com/">SwaggerHub</a>
+        </cite>,
+        by
+        <span property="schema:author" typeof="schema:Organization">
+          <span property="schema:name">SmartBear Software</span>
+        </span>
+      </dd>
+
+    </dl>
+  </section>
+
+  </section>
+</article>
+<footer>
+  <p>
+    <a href="https://scira.github.io/documentation/">Documentation home</a>
+    <a href="https://twitter.com/sciencedotai">@sciencedotai</a>
+    •
+    <a href="https://github.com/scienceai/scholarly.vernacular.io">Contribute</a>
+    •
+    Brought to you by the
+    <a href="http://science.ai/"><img src="sciencedotai.svg" alt="science.ai logo" height="20px"></a>
+    League of JStice
+  </p>
+</footer>
+</body>
+</html>
