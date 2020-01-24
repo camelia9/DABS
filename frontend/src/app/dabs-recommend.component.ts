@@ -414,21 +414,21 @@ export class DabsRecommendComponent implements OnInit {
             continue;
           }
           if (!dbO.nodes.find(o => o.label === dbName)) {
+            if (idx >= MAX_EXTRA_NODES) {
+              break;
+            }
             dbO.nodes.push({
               id: this.sanitizeNodeId(dbName),
               label: dbName,
               data: {myColor: nodesColorsMappings.default}
             });
+            idx++;
           }
           dbO.edges.push({
             source: $event.id,
             target: this.sanitizeNodeId(dbName),
             label: $event.data.property
           });
-          idx++;
-          if (idx >= MAX_EXTRA_NODES) {
-            break;
-          }
         }
         this.update$.next(true);
         this.zoomToFit$.next(true);
