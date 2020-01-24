@@ -15,7 +15,6 @@ export class DabsMainComponent {
   constructor(public $router: Router, private $http: HttpClient, public $cookies: CookieService, private snackBar: MatSnackBar) {
   }
 
-  authType = this.$cookies.get('auth_type');
   durationInSeconds = 5;
 
 

@@ -37,7 +37,7 @@
           </p>
           <span style="text-transform: capitalize;">{{$router.url | urlToState}}</span>
           <span class="example-spacer"></span>
-          <button mat-icon-button aria-label="AccountInfo" *ngIf="authType==='own'" [routerLink]="['/account']">
+          <button mat-icon-button aria-label="AccountInfo" [routerLink]="['/account']">
             <mat-icon>account_circle</mat-icon>
           </button>
           <button mat-icon-button aria-label="Exit" (click)="logOut()">

@@ -7,6 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatButtonModule} from '@angular/material/button';
+import { NgxJsonLdModule } from '@ngx-lite/json-ld';
 import {
   MatExpansionModule,
   MatFormFieldModule,
@@ -31,6 +32,7 @@ import {UrlToStatePipe} from './pipes/url-to-state.pipe';
 import {DabsAccountComponent} from './dabs-account.component';
 import {NgTerminalModule} from 'ng-terminal';
 import {AddTokenInterceptor} from './http.interceptor';
+import { DabsJsonldComponent } from './dabs-jsonld.component';
 
 
 @NgModule({
@@ -43,7 +45,8 @@ import {AddTokenInterceptor} from './http.interceptor';
     DabsPlaygroundComponent,
     DabsMainComponent,
     UrlToStatePipe,
-    DabsAccountComponent
+    DabsAccountComponent,
+    DabsJsonldComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +71,8 @@ import {AddTokenInterceptor} from './http.interceptor';
     MatExpansionModule,
     NgxGraphModule,
     NgTerminalModule,
-    MatStepperModule
+    MatStepperModule,
+    NgxJsonLdModule
   ],
   providers: [
     CookieService,

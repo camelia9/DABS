@@ -1,10 +1,11 @@
 <div fxLayout="column" fxLayoutAlign="center center">
+  <ngx-json-ld [json]="userJSONLD"></ngx-json-ld>
   <mat-card id="mainCard">
     <mat-card-title class="cardTitles">Account Information</mat-card-title>
     <mat-card-content style="margin: 20px 30px">
       <mat-horizontal-stepper [linear]=false #stepper fxFlexFill style="background: transparent">
         <mat-step [stepControl]="nameForm">
-          <form [formGroup]="nameForm" (submit)="updateAccount()">
+          <form [formGroup]="nameForm">
             <ng-template matStepLabel>Update your name</ng-template>
             <mat-form-field style="margin-left: 15px">
               <input matInput placeholder="Last name, First name" formControlName="nameCtrl">
@@ -60,7 +61,7 @@
           <div fxLayout="column" fxLayoutAlign="start start" style="margin-left: 15px">
             <p>You are now done. Click the Save button to update your info.</p>
             <p></p>
-            <button id="startButton" mat-flat-button color="accent">
+            <button id="startButton" mat-flat-button color="accent" (click)="updateAccount()">
               Save
               <mat-icon id="startIcon">save</mat-icon>
             </button>

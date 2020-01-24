@@ -16,9 +16,10 @@ export class DabsHomeComponent implements OnInit {
   private envChart: Chart;
   private dbChart: Chart;
   private chartColors: any;
-  private newsFeed = JSON.parse(localStorage.getItem('CACHED_DATA') || '[]');
+  public newsFeed = JSON.parse(localStorage.getItem('CACHED_DATA') || '[]');
   private headers: HttpHeaders;
   durationInSeconds = 5;
+  private dbData: { datasets: { backgroundColor: (string)[]; borderColor: string; data: number[]; borderWidth: number }[]; labels: any[] };
 
 
   constructor(private $http: HttpClient, private $cookies: CookieService, private snackBar: MatSnackBar) {
@@ -39,23 +40,8 @@ export class DabsHomeComponent implements OnInit {
       grey: 'rgb(201, 203, 207)'
     };
 
-    // this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/metrics', {
-    //   headers: {
-    //     'X-Client-ID': this.$cookies.get('user_token')
-    //   }
-    // })
-    //   .toPromise()
-    //   .then((res: any) => {
-    //     console.log(res);
-    //     //format chart data
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     this.openSnackBar('Retrieving chart data failed. Try again later.');
-    //   });
-
-    const dbData = {
-      labels: ['Redis', 'MongoDB', 'OracleDB', 'MySQL', 'GraphDB'],
+    this.dbData = {
+      labels: [],
       datasets: [{
         backgroundColor: [
           this.chartColors.red,
@@ -71,6 +57,21 @@ export class DabsHomeComponent implements OnInit {
         ]
       }]
     };
+    // first chart
+    this.$http.get(environment.LAMBDAS_API_ENDPOINT + '/metrics')
+      .toPromise()
+      .then((res: any) => {
+        console.log(res);
+
+        this.dbData.labels = Object.keys(res);
+        this.dbData.datasets[0].data = Object.values(res);
+        console.log(this.dbData);
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Retrieving chart data failed. Try again later.');
+      });
+
 
     const envData = {
       datasets: [{
@@ -91,7 +92,7 @@ export class DabsHomeComponent implements OnInit {
     };
 
     this.dbChart = new Chart(this.el.nativeElement, {
-      data: dbData,
+      data: this.dbData,
       type: 'bar',
       options: {
         legend: {

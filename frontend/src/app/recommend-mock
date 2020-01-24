@@ -1,0 +1,99 @@
+{
+  "Yaacomo": {
+    "@id": "http://www.semanticweb.org/ontologies/databases/tbox/YaacomoDatabaseManagementSystem",
+    "@type": "http://www.semanticweb.org/ontologies/databases/tbox/DatabaseManagementSystem",
+    "Supports indexing": {
+      "values": [
+        {
+          "@id": "http://www.semanticweb.org/ontologies/databases/tbox/OtherIndex",
+          "@type": "http://www.semanticweb.org/ontologies/databases/tbox/Index",
+          "value": "OtherIndex"
+        }
+      ],
+      "@id": "http://www.semanticweb.org/ontologies/databases/tbox/Supports_Indexing",
+      "@type": "http://www.w3.org/2002/07/owl/ObjectProperty"
+    },
+    "Has Concurrency Control Mechanism": {
+      "values": [
+        {
+          "@id": "http://www.semanticweb.org/ontologies/databases/tbox/OtherConcurrencyControlMechanism",
+          "@type": "http://www.semanticweb.org/ontologies/databases/tbox/ConcurrencyControlMechanism",
+          "value": "OtherConcurrencyControlMechanism"
+        }
+      ],
+      "@id": "http://www.semanticweb.org/ontologies/databases/tbox/hasConcurrencyControlMechanism",
+      "@type": "http://www.w3.org/2002/07/owl/ObjectProperty"
+    },
+    "Has Data Model": {
+      "values": [
+        {
+          "@id": "http://www.semanticweb.org/ontologies/databases/tbox/Relational",
+          "@type": "http://www.semanticweb.org/ontologies/databases/tbox/DataModel",
+          "value": "Relational"
+        }
+      ],
+      "@id": "http://www.semanticweb.org/ontologies/databases/tbox/hasDataModel",
+      "@type": "http://www.w3.org/2002/07/owl/ObjectProperty"
+    },
+    "Has Software License": {
+      "values": [
+        {
+          "@id": "http://www.semanticweb.org/ontologies/databases/tbox/Proprietary",
+          "@type": "http://www.semanticweb.org/ontologies/databases/tbox/SoftwareLicense",
+          "value": "Proprietary"
+        }
+      ],
+      "@id": "http://www.semanticweb.org/ontologies/databases/tbox/hasSoftwareLicense",
+      "@type": "http://www.w3.org/2002/07/owl/ObjectProperty"
+    },
+    "Has Storage Model": {
+      "values": [
+        {
+          "@id": "http://www.semanticweb.org/ontologies/databases/tbox/OtherStorageModel",
+          "@type": "http://www.semanticweb.org/ontologies/databases/tbox/StorageModel",
+          "value": "OtherStorageModel"
+        }
+      ],
+      "@id": "http://www.semanticweb.org/ontologies/databases/tbox/hasStorageModel",
+      "@type": "http://www.w3.org/2002/07/owl/ObjectProperty"
+    },
+    "Supports Operating System": {
+      "values": [
+        {
+          "@id": "http://www.semanticweb.org/ontologies/databases/tbox/Linux",
+          "@type": "http://www.semanticweb.org/ontologies/databases/tbox/OperatingSystem",
+          "value": "Linux"
+        },
+        {
+          "@id": "http://www.semanticweb.org/ontologies/databases/tbox/Windows",
+          "@type": "http://www.semanticweb.org/ontologies/databases/tbox/OperatingSystem",
+          "value": "Windows"
+        }
+      ],
+      "@id": "http://www.semanticweb.org/ontologies/databases/tbox/supportsOperatingSystem",
+      "@type": "http://www.w3.org/2002/07/owl/ObjectProperty"
+    },
+    "Supports Programming Language": {
+      "values": [
+        {
+          "@id": "http://www.semanticweb.org/ontologies/databases/tbox/OtherProgrammingLanguage",
+          "@type": "http://dbpedia.org/ontology/ProgrammingLanguage",
+          "value": "Other"
+        }
+      ],
+      "@id": "http://www.semanticweb.org/ontologies/databases/tbox/supportsProgrammingLanguage",
+      "@type": "http://www.w3.org/2002/07/owl/ObjectProperty"
+    },
+    "Supports Query Language": {
+      "values": [
+        {
+          "@id": "http://www.semanticweb.org/ontologies/databases/tbox/OtherQueryLanguage",
+          "@type": "http://www.semanticweb.org/ontologies/databases/tbox/QueryLanguage",
+          "value": "OtherQueryLanguage"
+        }
+      ],
+      "@id": "http://www.semanticweb.org/ontologies/databases/tbox/supportsQueryLanguage",
+      "@type": "http://www.w3.org/2002/07/owl/ObjectProperty"
+    }
+  }
+}

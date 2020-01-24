@@ -31,6 +31,11 @@ export class DabsSignupComponent {
 
   goSignUp() {
 
+    if (!this.signFormModel.password || !this.signFormModel.password || !this.signFormModel.email || !this.signFormModel.name){
+      this.openSnackBar('Please fill in all the fields.');
+      return;
+    }
+
     if (this.signFormModel.password !== this.signFormModel.cfPassword) {
       this.openSnackBar('Confirm password does not match. Make sure they are the same.');
       return;
@@ -38,27 +43,26 @@ export class DabsSignupComponent {
 
     this.req = {
       email: this.signFormModel.email,
-      password: sha256(this.signFormModel.password),
+      password: this.signFormModel.password,
       name: this.signFormModel.name
     };
 
     console.log(this.req);
 
-
-    // this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/users', this.req)
-    //   .toPromise()
-    //   .then((res: any) => {
-    //     console.log(res);
-    //     this.openSnackBar('Signed up.. Redirecting to login...');
-    //     setTimeout(() => {
-    //       this.$router.navigate(['/login'])
-    //         .then();
-    //     }, 6000);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     this.openSnackBar('Sign up failed. Try again later.');
-    //   });
+    this.$http.post(environment.LAMBDAS_API_ENDPOINT + '/users', this.req)
+      .toPromise()
+      .then((res: any) => {
+        console.log(res);
+        this.openSnackBar('Signed up.. Redirecting to login...');
+        setTimeout(() => {
+              this.$router.navigate(['/login'])
+                .then();
+            }, 6000);
+      })
+      .catch((err) => {
+        console.error(err);
+        this.openSnackBar('Creating user failed. Try again later.');
+      });
   }
 
   openSnackBar(message: string) {
